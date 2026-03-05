@@ -678,5 +678,5 @@ app.get('/management/reports/sale-2', isAdmin, (req, res) => {
 });
 
 app.listen(PORT, () => {
-  console.log(`C-BOOK frontend running at http://localhost:${PORT}`);
+  console.log(`C-BOOK FRONTEND running at http://localhost:${PORT}`);
 });
