@@ -96,6 +96,7 @@ app.get('/', async (req, res) => {
     }
 
     return res.render('home', {
+       activePage: 'home',
       books: booksData.books,
       categories: categoriesData.categories,
       currentCategory: category,
@@ -110,6 +111,29 @@ app.get('/', async (req, res) => {
   } catch (error) {
     console.error('home error:', error.message);
     return res.status(500).send('Error loading home page');
+  }
+});
+
+app.get('/contact', async (req, res) => {
+  try {
+    const categoriesResp = await api.get('/api/categories', {
+      params: { limit: 100 },
+      headers: apiHeaders(req)
+    });
+
+    return res.render('contact', {
+      categories: categoriesResp.data.categories || [],
+      currentCategory: 'all',
+      searchQuery: '',
+      activePage: 'contact',
+      userLoggedIn: !!req.session?.userId,
+      cartCount: req.session.cartCount || 0,
+      userName: req.session.userName || null,
+      backendBaseUrl: BACKEND_URL
+    });
+  } catch (error) {
+    console.error('contact error:', error.message);
+    return res.status(500).send('Error loading contact page');
   }
 });
 
@@ -680,3 +704,4 @@ app.get('/management/reports/sale-2', isAdmin, (req, res) => {
 app.listen(PORT, () => {
   console.log(`C-BOOK FRONTEND running at http://localhost:${PORT}`);
 });
+

@@ -120,8 +120,10 @@
     </div>
 
         </main>
+    <br><br>
+    <%- include('./partials/footer.ejs') %>
 
-        <script>
+    <script>
             window.BACKEND_BASE_URL = '<%= backendBaseUrl %>';
         </script>
         <script src="/js/main.js"></script>
@@ -143,3 +145,4 @@
         window.history.replaceState({}, document.title, cleanUrl);
     }
 </script>
+
