@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - C-BOOK</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/style-manage.css">
+</head>
+
+<body>
+    <div class="main-layout">
+        <%- include('../../partials/sidebar.ejs') %>
+            <main class="content-area">
+                <div class="content-header">
+                    <div>
+                        <h1>Book Management</h1>
+                        <p class="subtitle">Organize and manage your library book collections.</p>
+                    </div>
+                    <a href="/management/books/create" class="btn-primary-add">
+                        <i class="fa-solid fa-plus"></i> Add Book
+                    </a>
+                </div>
+                <div class="toolbar-container">
+
+                    <div class="toolbar-search">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" id="searchBookInput" value="<%= searchQuery %>"
+                            placeholder="Search Book name..." class="search-input">
+                    </div>
+
+                    <div class="filter-group-container">
+                        <div class="filter-item">
+                            <label class="filter-label">Category</label>
+                            <div class="select-wrapper">
+                                <select id="categoryFilter" class="filter-select category-select">
+                                    <option value="">All Categories</option>
+                                    <% categories.forEach(cat=> { %>
+                                        <option value="<%= cat.category_id %>" <%=filterCategory==cat.category_id
+                                            ? 'selected' : '' %>>
+                                            <%= cat.category_name %>
+                                        </option>
+                                        <% }) %>
+                                </select>
+                                <i class="fa-solid fa-chevron-down select-icon"></i>
+                            </div>
+                        </div>
+
+                        <div class="filter-item">
+                            <label class="filter-label">Status</label>
+                            <div class="select-wrapper">
+                                <select id="statusFilter" class="filter-select status-select">
+                                    <option value="">All Status</option>
+                                    <option value="Available" <%=filterStatus==='Available' ? 'selected' : '' %>
+                                        >Available</option>
+                                    <option value="Out of Stock" <%=filterStatus==='Out of Stock' ? 'selected' : '' %>
+                                        >Out of Stock</option>
+                                </select>
+                                <i class="fa-solid fa-chevron-down select-icon"></i>
+                            </div>
+                        </div>
+
+                        <div class="total-books-widget">
+                            <div class="total-books-label">Total Books</div>
+                            <div id="totalBooksDisplay" class="total-books-value">
+                                <%= totalBooksCount.toLocaleString() %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="data-card">
+                    <div class="data-header">
+
+                    </div>
+
+                    <table class="category-table">
+                        <thead>
+                            <tr>
+                                <th style="width: 60px; text-align: center;">Image</th>
+                                <th>Book Title</th>
+                                <th>Author</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Stock</th>
+                                <th>Status</th>
+                                <th style="text-align: right;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (books.length===0) { %>
+                                <tr>
+                                    <td class="none-data" colspan="8">No books available.
+                                        Add a new book!</td>
+                                </tr>
+                                <% } else { %>
+                                    <% books.forEach(book=> { %>
+                                        <tr>
+                                            <td style="text-align: center; vertical-align: middle;">
+                                                <img src="/images/<%= book.book_img || 'default_book.png' %>" alt="Cover" class="book-thumbnail">
+                                            </td>
+                                            <td>
+                                                <div class="cat-name-cell">
+                                                    <div>
+                                                        <div style="font-weight: 600; color: #1e293b;">
+                                                            <%= book.title %>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="cat-name-cell">
+                                                    <div>
+                                                        <div style="font-weight: 600; color: #1e293b;">
+                                                            <%= book.author %>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <% if (book.category) { const
+                                                    badgeColors=['purple-light', 'orange-light' , 'blue-light'
+                                                    , 'pink-light' , 'teal-light' , 'indigo-light' , 'yellow-light'
+                                                    , 'cyan-light' , 'sky-light' , 'fuchsia-light' , 'amber-light'
+                                                    , 'slate-light' ]; const colorIndex=book.category.category_id %
+                                                    badgeColors.length; const colorClass=badgeColors[colorIndex]; %>
+                                                    <span class="badge-pill <%= colorClass %>">
+                                                        <%= book.category.category_name %>
+                                                    </span>
+                                                    <% } else { %>
+                                                        <span class="badge-pill gray-light">Uncategorized</span>
+                                                        <% } %>
+                                            </td>
+                                            <td style="font-weight: 500;">
+                                                <%= parseFloat(book.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 }) %>
+                                            </td>
+                                            <td>
+                                                <%= book.stock_quantity %>
+                                            </td>
+                                            <td>
+                                                <% if (book.book_status==='Available' ) { %> <span
+                                                        class="badge-pill green-light">Available</span>
+                                                    <% } else if (book.book_status==='Out of Stock' ) { %> <span
+                                                            class="badge-pill"
+                                                            style="background-color: #fee2e2; color: #ef4444;">Out of
+                                                            Stock</span>
+                                                        <% } else { %>
+                                                            <span class="badge-pill orange-light">
+                                                                <%= book.book_status || 'No Status' %>
+                                                            </span>
+                                                            <% } %>
+                                            </td>
+                                            <td class="text-right">
+                                                <div class="action-group">
+                                                    <a href="/management/books/edit/<%= book.book_id %>?page=<%= currentPage %>&search=<%= searchQuery %>&category=<%= filterCategory %>&status=<%= filterStatus %>"
+                                                        class="action-btn-edit">
+                                                        <i class="fa-solid fa-pen"></i>
+                                                    </a>
+                                                    <button onclick="confirmDeleteBook('<%= book.book_id %>')"
+                                                        class="action-btn-delete">
+                                                        <i class="fa-solid fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                            <% } %>
+                        </tbody>
+                    </table>
+
+                    <div class="data-footer">
+                        <div class="showing-text">
+                            Showing <%= totalItems> 0 ? (currentPage - 1) * limit + 1 : 0 %>
+                                to <%= Math.min(currentPage * limit, totalItems || 0) %>
+                                    of <%= (totalItems || 0).toLocaleString() %> entries
+                        </div>
+
+                        <div class="pagination">
+                            <a href="<%= currentPage > 1 ? '?page=' + (currentPage - 1) + '&search=' + searchQuery : '#' %>"
+                                class="page-nav <%= currentPage === 1 ? 'disabled' : '' %>">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </a>
+
+                            <% for (let i=1; i <=totalPages; i++) { if (i===1 || i===totalPages || (i>= currentPage - 1
+                                && i <= currentPage + 1)) { %>
+                                    <a href="?page=<%= i %>&search=<%= searchQuery %>"
+                                        class="page-num <%= currentPage === i ? 'active' : '' %>">
+                                        <%= i %>
+                                    </a>
+                                    <% } else if (i===currentPage - 2 || i===currentPage + 2) { %>
+                                        <span class="page-dots">...</span>
+                                        <% } } %>
+
+                                            <a href="<%= currentPage < totalPages ? '?page=' + (currentPage + 1) + '&search=' + searchQuery : '#' %>"
+                                                class="page-nav <%= currentPage === totalPages ? 'disabled' : '' %>">
+                                                <i class="fa-solid fa-chevron-right"></i>
+                                            </a>
+                        </div>
+                    </div>
+                    
+            </main>
+
+    </div>
+
+</body>
+
+</html>
+<script>
+    let searchTimer;
+    let currentAbortController = null; 
+
+    const searchInput = document.getElementById('searchBookInput');
+    const categoryFilter = document.getElementById('categoryFilter');
+    const statusFilter = document.getElementById('statusFilter');
+
+    function fetchFilteredBooks() {
+        if (currentAbortController) {
+            currentAbortController.abort();
+        }
+
+        currentAbortController = new AbortController();
+        const signal = currentAbortController.signal;
+
+        const query = searchInput.value;
+        const cat = categoryFilter.value;
+        const stat = statusFilter.value;
+
+        const url = `/management/books?search=${encodeURIComponent(query)}&category=${encodeURIComponent(cat)}&status=${encodeURIComponent(stat)}`;
+        fetch(url, {
+            headers: { 'X-Requested-With': 'XMLHttpRequest' },
+            signal: signal
+        })
+            .then(res => res.json())
+            .then(data => {
+                // ตรวจสอบว่ามีข้อมูลส่งมาครบไหม ถ้าไม่มีให้ใส่ค่าเริ่มต้นเป็น 0 หรือหน้า 1
+                updateTableBody(data.books || []);
+
+                const total = data.totalItems || 0;
+                const current = data.currentPage || 1;
+                const limit = data.limit || 6; // ให้ตรงกับใน Controller
+
+                const totalPages = data.totalPages || 1;
+
+                document.getElementById('totalBooksDisplay').innerText = total.toLocaleString();
+
+                const showingText = document.querySelector('.showing-text');
+                if (showingText) {
+                    const start = total === 0 ? 0 : (current - 1) * limit + 1;
+                    const end = Math.min(current * limit, total);
+                    showingText.innerText = `Showing ${start} to ${end} of ${total.toLocaleString()} entries`;
+                }
+
+                updatePagination(current, totalPages, searchInput.value, categoryFilter.value, statusFilter.value);
+            })
+            .catch(err => {
+                // ถ้ายกเลิก Request เก่าสำเร็จ มันจะโยน Error ชื่อ AbortError เราก็แค่ข้ามมันไป ไม่ต้องแจ้งเตือน
+                if (err.name === 'AbortError') {
+                    console.log('Cancelled previous search');
+                } else {
+                    console.error("Search Error:", err);
+                }
+            });
+    }
+
+    searchInput.addEventListener('input', () => {
+        clearTimeout(searchTimer);
+        searchTimer = setTimeout(fetchFilteredBooks, 400);
+    });
+
+    categoryFilter.addEventListener('change', fetchFilteredBooks);
+    statusFilter.addEventListener('change', fetchFilteredBooks);
+
+    function updateTableBody(books) {
+    const tbody = document.querySelector('.category-table tbody');
+    
+    // 1.ต้องสั่งล้างข้อมูลเก่าในตารางทิ้งก่อนเสมอ
+    tbody.innerHTML = ''; 
+
+    if (!books || books.length === 0) {
+        tbody.innerHTML = `
+        <tr>
+            <td colspan="8" style="text-align: center; padding: 50px; color: #64748b;">
+                <i class="fa-solid fa-box-open" style="font-size: 40px; display: block; margin-bottom: 10px; opacity: 0.5;"></i>
+                No books found matching your search.
+            </td>
+        </tr>`;
+        return;
+    }
+
+    const badgeColors = ['purple-light', 'orange-light', 'blue-light', 'pink-light', 
+        'teal-light', 'indigo-light', 'yellow-light', 'cyan-light', 
+        'sky-light', 'fuchsia-light', 'amber-light', 'slate-light'];
+
+    books.forEach(book => {
+        let colorClass = 'gray-light';
+        let catName = 'Uncategorized';
+
+        if (book.category) {
+            const colorIndex = book.category.category_id % badgeColors.length;
+            colorClass = badgeColors[colorIndex];
+            catName = book.category.category_name;
+        }
+
+        let statusHtml = '';
+        if (book.book_status === 'Available') {
+            statusHtml = '<span class="badge-pill green-light">Available</span>';
+        } else if (book.book_status === 'Out of Stock') {
+            statusHtml = '<span class="badge-pill" style="background-color: #fee2e2; color: #ef4444;">Out of Stock</span>';
+        } else {
+            statusHtml = `<span class="badge-pill orange-light">${book.book_status || 'Available'}</span>`;
+        }
+
+        // 2. เอาข้อมูลใหม่มาต่อท้ายตาราง
+        const row = `
+        <tr>
+            <td style="text-align: center; vertical-align: middle;">
+                <img src="/images/${book.book_img || 'default_book.png'}" alt="Cover" class="book-thumbnail">
+            </td>
+            <td><div style="font-weight: 600; color: #1e293b;">${book.title}</div></td>
+            <td><div style="color: #475569;">${book.author}</div></td>
+            <td><span class="badge-pill ${colorClass}">${catName}</span></td>
+            <td style="font-weight: 500;">${parseFloat(book.price).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</td>
+            <td>${book.stock_quantity}</td>
+            <td>${statusHtml}</td>
+            <td class="text-right">
+                <div class="action-group">
+                    <a href="/management/books/edit/${book.book_id}" class="action-btn-edit"><i class="fa-solid fa-pen"></i></a>
+                    <button onclick="confirmDeleteBook('${book.book_id}')" class="action-btn-delete"><i class="fa-solid fa-trash"></i></button>
+                </div>
+            </td>
+        </tr>`;
+        
+        tbody.insertAdjacentHTML('beforeend', row);
+    });
+}
+
+    function updatePagination(currentPage, totalPages, query, cat, stat) {
+        const paginationContainer = document.querySelector('.pagination');
+        if (!paginationContainer) return;
+
+        // ถ้าไม่มีหนังสือเลย หรือมีแค่หน้าเดียว (เช่น ค้นหาเจอ 2 เล่ม) ให้เคลียร์ปุ่มทิ้ง หรือจะปล่อยให้โชว์แค่หน้า 1 ก็ได้
+        if (totalPages <= 1) {
+            paginationContainer.innerHTML = '';
+            return;
+        }
+
+        const getUrl = (p) => `?page=${p}&search=${encodeURIComponent(query)}&category=${encodeURIComponent(cat)}&status=${encodeURIComponent(stat)}`;
+
+        let html = '';
+
+        // ปุ่มย้อนกลับ (Prev)
+        html += `<a href="${currentPage > 1 ? getUrl(currentPage - 1) : '#'}" class="page-nav ${currentPage === 1 ? 'disabled' : ''}"><i class="fa-solid fa-chevron-left"></i></a>`;
+
+        // วนลูปสร้างตัวเลขหน้า
+        for (let i = 1; i <= totalPages; i++) {
+            if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+                html += `<a href="${getUrl(i)}" class="page-num ${currentPage === i ? 'active' : ''}">${i}</a>`;
+            } else if (i === currentPage - 2 || i === currentPage + 2) {
+                html += `<span class="page-dots">...</span>`;
+            }
+        }
+
+        // ปุ่มถัดไป (Next)
+        html += `<a href="${currentPage < totalPages ? getUrl(currentPage + 1) : '#'}" class="page-nav ${currentPage === totalPages ? 'disabled' : ''}"><i class="fa-solid fa-chevron-right"></i></a>`;
+
+        // นำ HTML ที่สร้างเสร็จไปแทนที่ของเดิม
+        paginationContainer.innerHTML = html;
+    }
+
+    function confirmDeleteBook(bookId) {
+        if (confirm('Do you want to delete this book?')) {
+            fetch(`/management/books/delete/${bookId}`, {
+                method: 'DELETE',
+                headers: { 'Content-Type': 'application/json' }
+            }).then(res => {
+                if (res.ok) window.location.reload();
+                else alert('Error deleting book');
+            }).catch(err => console.error(err));
+        }
+    }
+</script>

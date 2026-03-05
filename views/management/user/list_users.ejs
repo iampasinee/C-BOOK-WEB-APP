@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>User Management - C-BOOK</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style-manage.css">
+</head>
+
+<body>
+    <div class="main-layout">
+        <%- include('../../partials/sidebar.ejs') %>
+            <main class="content-area">
+                <div class="content-header">
+                    <div>
+                        <h1>User Management</h1>
+                        <p class="subtitle">Organize and manage system members and admins.</p>
+                    </div>
+                </div>
+                <div class="toolbar-container">
+
+                    <div class="toolbar-search">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" id="searchUserInput" value="<%= searchQuery %>"
+                            placeholder="Search name or email..." class="search-input">
+                    </div>
+
+                    <div class="filter-group-container">
+                        <div class="filter-item">
+                            <label class="filter-label">Role</label>
+                            <div class="select-wrapper">
+                                <select id="roleFilter" class="filter-select category-select">
+                                    <option value="member" <%=filterRole==='member' ? 'selected' : '' %>>Member</option>
+                                    <option value="admin" <%=filterRole==='admin' ? 'selected' : '' %>>Admin</option>
+
+                                </select>
+                                <i class="fa-solid fa-chevron-down select-icon"></i>
+                            </div>
+                        </div>
+
+                        <div class="summary-stats-group">
+                            <div class="stat-item">
+                                <div class="stat-item-label">Total Members</div>
+                                <div id="totalUsersDisplay" class="stat-item-value value-users">
+                                    <%= totalMemberCount.toLocaleString() %>
+                                </div>
+                            </div>
+                            <div class="stat-divider"></div>
+                            <div class="stat-item">
+                                <div class="stat-item-label">Total Admin</div>
+                                <div id="totalAdminDisplay" class="stat-item-value value-admin">
+                                    <%= totalAdminCount.toLocaleString() %>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="data-card">
+                    <table class="category-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Role</th>
+                                <th>Status</th>
+                                <th style="text-align: right;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (users.length===0) { %>
+                                <tr>
+                                    <td class="none-data" colspan="5">No users found.</td>
+                                </tr>
+                                <% } else { %>
+                                    <% users.forEach(user=> { %>
+                                        <tr>
+                                            <td>
+                                                <div style="font-weight: 600; color: #1e293b;">
+                                                    <%= user.user_name %>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="color: #475569;">
+                                                    <%= user.user_email %>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <% if (user.user_role==='admin' ) { %>
+                                                    <span class="badge-pill purple-light">Admin</span>
+                                                    <% } else { %>
+                                                        <span class="badge-pill blue-light">Member</span>
+                                                        <% } %>
+                                            </td>
+                                            <td>
+                                                <% if (user.user_status==='active' ) { %>
+                                                    <span class="badge-pill green-light">Active</span>
+                                                    <% } else { %>
+                                                        <span class="badge-pill gray-light">
+                                                            <%= user.user_status %>
+                                                        </span>
+                                                        <% } %>
+                                            </td>
+                                            <td class="text-right">
+                                                <div class="action-group">
+                                                    <button class="action-btn-edit" title="Change Role"
+                                                        onclick="changeUserRole('<%= user.user_id %>', '<%= user.user_name %>', '<%= user.user_role %>')">
+                                                        <i class="fa-solid fa-user-pen"></i>
+                                                    </button>
+                                                    <button class="action-btn-delete" title="Delete User"
+                                                        onclick="deleteUser('<%= user.user_id %>', '<%= user.user_name %>')">
+                                                        <i class="fa-solid fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                            <% } %>
+                        </tbody>
+                    </table>
+
+                    <div class="data-footer">
+                        <div class="showing-text">
+                            Showing <%= totalItems> 0 ? (currentPage - 1) * limit + 1 : 0 %>
+                                to <%= Math.min(currentPage * limit, totalItems || 0) %>
+                                    of <%= (totalItems || 0).toLocaleString() %> entries
+                        </div>
+                        <div class="pagination">
+                            <a href="<%= currentPage > 1 ? '?page=' + (currentPage - 1) + '&search=' + searchQuery : '#' %>"
+                                class="page-nav <%= currentPage === 1 ? 'disabled' : '' %>">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </a>
+                            <% for (let i=1; i <=totalPages; i++) { if (i===1 || i===totalPages || (i>= currentPage - 1
+                                && i <= currentPage + 1)) { %>
+                                    <a href="?page=<%= i %>&search=<%= searchQuery %>&role=<%= filterRole %>"
+                                        class="page-num <%= currentPage === i ? 'active' : '' %>">
+                                        <%= i %>
+                                    </a>
+                                    <% } else if (i===currentPage - 2 || i===currentPage + 2) { %>
+                                        <span class="page-dots">...</span>
+                                        <% } } %>
+                                            <a href="<%= currentPage < totalPages ? '?page=' + (currentPage + 1) + '&search=' + searchQuery : '#' %>"
+                                                class="page-nav <%= currentPage === totalPages ? 'disabled' : '' %>">
+                                                <i class="fa-solid fa-chevron-right"></i>
+                                            </a>
+                        </div>
+                    </div>
+                </div>
+                
+            </main>
+    </div>
+
+    <script>
+        let searchTimer;
+        let currentAbortController = null;
+
+        const searchInput = document.getElementById('searchUserInput');
+        const roleFilter = document.getElementById('roleFilter');
+
+        function fetchFilteredUsers() {
+            if (currentAbortController) currentAbortController.abort();
+            currentAbortController = new AbortController();
+            const signal = currentAbortController.signal;
+
+            const query = searchInput.value;
+            const role = roleFilter.value;
+
+            // 🚨 ตรวจสอบ URL ให้ตรงกับที่ Controller รับ (search และ role)
+            const url = `/management/users?search=${encodeURIComponent(query)}&role=${encodeURIComponent(role)}`;
+
+            fetch(url, {
+                headers: { 'X-Requested-With': 'XMLHttpRequest' },
+                signal: signal
+            })
+                .then(res => res.json())
+                .then(data => {
+                    updateTableBody(data.users || []);
+
+                    // 🚨 อัปเดตตัวเลขสถิติ (ดึงจาก data ที่ส่งมาจาก JSON)
+                    // แสดงจำนวน Member (Total Users Label)
+                    document.getElementById('totalUsersDisplay').innerText = (data.totalMemberCount || 0).toLocaleString();
+                    // แสดงจำนวน Admin
+                    document.getElementById('totalAdminDisplay').innerText = (data.totalAdminCount || 0).toLocaleString();
+
+                    // อัปเดต Showing text
+                    const total = data.totalItems || 0;
+                    const current = data.currentPage || 1;
+                    const limit = data.limit || 6;
+                    const showingText = document.querySelector('.showing-text');
+                    if (showingText) {
+                        const start = total === 0 ? 0 : (current - 1) * limit + 1;
+                        const end = Math.min(current * limit, total);
+                        showingText.innerText = `Showing ${start} to ${end} of ${total.toLocaleString()} entries`;
+                    }
+
+                    updatePagination(current, data.totalPages || 1, query, role);
+                })
+                .catch(err => {
+                    if (err.name !== 'AbortError') console.error("Search Error:", err);
+                });
+        }
+
+        // Event Listeners
+        searchInput.addEventListener('input', () => {
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(fetchFilteredUsers, 400);
+        });
+
+        roleFilter.addEventListener('change', fetchFilteredUsers);
+
+        function updateTableBody(users) {
+            const tbody = document.querySelector('.category-table tbody');
+            tbody.innerHTML = '';
+
+            if (!users || users.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align: center; padding: 50px; color: #64748b;">No users found.</td></tr>`;
+                return;
+            }
+
+            users.forEach(user => {
+                let roleHtml = user.user_role === 'admin' ? '<span class="badge-pill purple-light">Admin</span>' : '<span class="badge-pill blue-light">Member</span>';
+                let statusHtml = user.user_status === 'active' ? '<span class="badge-pill green-light">Active</span>' : `<span class="badge-pill gray-light">${user.user_status}</span>`;
+
+                // 🚨 อัปเดต HTML แถวตารางของ JS ให้เหมือนกับ EJS
+                const row = `
+            <tr>
+                <td><div style="font-weight: 600; color: #1e293b;">${user.user_name}</div></td>
+                <td><div style="color: #475569;">${user.user_email}</div></td>
+                <td>${roleHtml}</td>
+                <td>${statusHtml}</td>
+                <td class="text-right">
+                    <div class="action-group">
+                        <button class="action-btn-edit" title="Change Role" onclick="changeUserRole('${user.user_id}', '${user.user_name}', '${user.user_role}')">
+                            <i class="fa-solid fa-user-pen"></i>
+                        </button>
+                        <button class="action-btn-delete" title="Delete User" onclick="deleteUser('${user.user_id}', '${user.user_name}')">
+                            <i class="fa-solid fa-trash"></i>
+                        </button>
+                    </div>
+                </td>
+            </tr>`;
+                tbody.insertAdjacentHTML('beforeend', row);
+            });
+        }
+
+        function updatePagination(currentPage, totalPages, query, role) {
+            // ... (โค้ดเดิมของคุณ) ...
+            const paginationContainer = document.querySelector('.pagination');
+            if (!paginationContainer) return;
+            if (totalPages <= 1) { paginationContainer.innerHTML = ''; return; }
+
+            const getUrl = (p) => `?page=${p}&search=${encodeURIComponent(query)}&role=${encodeURIComponent(role)}`;
+            let html = `<a href="${currentPage > 1 ? getUrl(currentPage - 1) : '#'}" class="page-nav ${currentPage === 1 ? 'disabled' : ''}"><i class="fa-solid fa-chevron-left"></i></a>`;
+
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+                    html += `<a href="${getUrl(i)}" class="page-num ${currentPage === i ? 'active' : ''}">${i}</a>`;
+                } else if (i === currentPage - 2 || i === currentPage + 2) {
+                    html += `<span class="page-dots">...</span>`;
+                }
+            }
+            html += `<a href="${currentPage < totalPages ? getUrl(currentPage + 1) : '#'}" class="page-nav ${currentPage === totalPages ? 'disabled' : ''}"><i class="fa-solid fa-chevron-right"></i></a>`;
+            paginationContainer.innerHTML = html;
+        }
+
+        // ==========================================
+        // 🚨 สคริปต์ใหม่: จัดการแก้ไขสิทธิ์ และ ลบผู้ใช้
+        // ==========================================
+
+        // ฟังก์ชันสลับ Role (Admin <-> Member)
+        function changeUserRole(userId, userName, currentRole) {
+            const newRole = currentRole === 'admin' ? 'member' : 'admin';
+            const confirmMsg = `ยืนยันการเปลี่ยนแปลงสิทธิ์:\n\nคุณต้องการเปลี่ยนสิทธิ์ของ "${userName}" \nจาก [ ${currentRole.toUpperCase()} ] เป็น [ ${newRole.toUpperCase()} ] ใช่หรือไม่?`;
+
+            if (confirm(confirmMsg)) {
+                // ส่งคำขอไปเปลี่ยนสิทธิ์ที่ Backend
+                fetch(`/management/users/${userId}/role`, {
+                    method: 'PUT',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ role: newRole })
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        // ถ้าสำเร็จ ให้โหลดข้อมูลในตารางใหม่
+                        fetchFilteredUsers();
+                    })
+                    .catch(err => console.error("Error updating role:", err));
+            }
+        }
+
+        // ฟังก์ชันลบผู้ใช้
+        function deleteUser(userId, userName) {
+            const confirmMsg = `คำเตือน!\n\nคุณแน่ใจหรือไม่ว่าต้องการลบผู้ใช้ "${userName}" ออกจากระบบ?\n(การกระทำนี้ไม่สามารถย้อนกลับได้)`;
+
+            if (confirm(confirmMsg)) {
+                // ส่งคำขอไปลบผู้ใช้ที่ Backend
+                fetch(`/management/users/${userId}`, {
+                    method: 'DELETE'
+                })
+                    .then(res => res.json())
+                    .then(data => {
+                        // ถ้าสำเร็จ ให้โหลดข้อมูลในตารางใหม่
+                        fetchFilteredUsers();
+                    })
+                    .catch(err => console.error("Error deleting user:", err));
+            }
+        }
+    </script>
+</body>
+
+</html>

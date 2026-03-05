@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - C-BOOK Admin</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style-manage.css">
+</head>
+<body>
+    <div class="main-layout">
+        <%- include('./partials/sidebar.ejs') %>
+        <main class="content-area">
+            
+            <div class="content-header">
+                <div>
+                    <h1>Overview Dashboard</h1>
+                    <p class="subtitle">Welcome back! Here's what's happening with your store today.</p>
+                </div>
+            </div>
+
+            <div class="stats-grid">
+               
+
+                <div class="stat-card">
+                    <div class="stat-icon icon-orders">
+                        <i class="fa-solid fa-cart-shopping"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Total Orders</h3>
+                        <p class="stat-value"><%= totalOrders.toLocaleString() %></p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon icon-books">
+                        <i class="fa-solid fa-book"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Total Books Sold</h3>
+                        <p class="stat-value"><%= totalBooksSold.toLocaleString() %></p>
+                    </div>
+                </div>
+
+                <div class="stat-card">
+                    <div class="stat-icon icon-customers">
+                        <i class="fa-solid fa-users"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3>Customers</h3>
+                        <p class="stat-value"><%= totalUsers.toLocaleString() %></p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recent-orders-section">
+                <div class="section-header">
+                    <h2>Recent Orders</h2>
+                    <a href="/management/orders" class="btn-view-all">View All</a>
+                </div>
+                <div class="data-card recent-orders-card">
+                    <table class="category-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Date</th>
+                                <th>Customer</th>
+                                <th>Status</th>
+                                <th>Items</th>
+                                <th class="text-right">Amount</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (recentOrders.length === 0) { %>
+                                <tr>
+                                    <td colspan="5" class="empty-row-msg">No recent orders.</td>
+                                </tr>
+                            <% } else { %>
+                                <% recentOrders.forEach(order => { %>
+                                    <tr>
+                                        <td>
+                                            <div class="order-id-badge">#ORD-<%= order.order_id.toString().padStart(4, '0') %></div>
+                                        </td>
+                                        <td>
+                                            <div class="date-text"><%= new Date(order.order_date).toLocaleDateString('en-GB') %></div>
+                                        </td>
+                                        <td>
+                                            <div class="customer-text"><%= order.user_name %></div>
+                                        </td>
+                                        <td>
+                                            <span class="status-badge-sm badge-<%= order.status %>">
+                                                <%= order.status %>
+                                            </span>
+                                        </td>
+                                        <td>
+                                            <div class="customer-text">
+                                                <%= order.total_items %> 
+                                            </div>
+                                        </td>
+                                        <td class="amount-cell">
+                                            <%= parseFloat(order.total_amount).toLocaleString('en-US', {minimumFractionDigits: 2}) %>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            <% } %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+        </main>
+    </div>
+</body>
+</html>

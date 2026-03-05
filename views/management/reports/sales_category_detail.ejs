@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= categoryName %> Report - C-BOOK</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style-manage.css">
+</head>
+<body>
+    <div class="main-layout">
+        <%- include('../../partials/sidebar.ejs') %>
+        <main class="content-area">
+            <div class="top-navigation">
+                <a href="/management/reports/sales_category" class="btn-back-white">
+                    <i class="fa-solid fa-arrow-left"></i> Back to All Categories
+                </a>
+                <button class="btn-print" onclick="window.print()">
+                    <i class="fa-solid fa-print"></i> Print Report
+                </button>
+            </div>
+
+            <div class="header-info-card">
+                <div class="header-info-left">
+                    <h1>Category <span class="highlight-category"><%= categoryName %></span></h1>
+                    <div class="info-badge">Detailed breakdown of books sold in this category</div>
+                </div>
+            </div>
+
+            <div class="summary-cards-wrapper">
+                <div class="summary-card">
+                    <p class="summary-card-title">Total Books Sold</p>
+                    <h2 class="summary-card-value">
+                        <%= grandTotalQty.toLocaleString() %> <span class="summary-card-unit">pcs</span>
+                    </h2>
+                </div>
+                <div class="summary-card">
+                    <p class="summary-card-title">Total Revenue</p>
+                    <h2 class="summary-card-value text-red">
+                        ฿<%= parseFloat(grandTotalRevenue).toLocaleString('en-US', {minimumFractionDigits: 2}) %>
+                    </h2>
+                </div>
+            </div>
+
+            <div class="report-card">
+                <table class="report-table">
+                    <thead>
+                        <tr>
+                            <th class="th-rank">Rank</th>
+                            <th>Book Title</th>
+                            <th class="text-center th-qty">Qty Sold</th>
+                            <th class="text-right th-revenue">Revenue Generated</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% if (reportData.length === 0) { %>
+                            <tr><td colspan="4" class="empty-report-msg">No books sold in this category yet.</td></tr>
+                        <% } else { %>
+                            <% reportData.forEach((book, index) => { %>
+                                <tr>
+                                    <td class="text-center">
+                                        <span class="rank-badge <%= index === 0 ? 'rank-1' : index === 1 ? 'rank-2' : index === 2 ? 'rank-3' : '' %>"><%= index + 1 %></span>
+                                    </td>
+                                    <td class="td-category"><i class="fa-solid fa-book-open icon-book"></i> <%= book.title %></td>
+                                    <td class="text-center td-qty"><%= book.qty.toLocaleString() %> pcs</td>
+                                    <td class="td-revenue">฿<%= parseFloat(book.revenue).toLocaleString('en-US', {minimumFractionDigits: 2}) %></td>
+                                </tr>
+                            <% }) %>
+                        <% } %>
+                    </tbody>
+                    <tfoot>
+                        <tr>
+                            <td colspan="2" class="tfoot-label">GRAND TOTAL</td>
+                            <td class="text-center tfoot-qty"><%= grandTotalQty.toLocaleString() %> pcs</td>
+                            <td class="tfoot-value">฿<%= parseFloat(grandTotalRevenue).toLocaleString('en-US', {minimumFractionDigits: 2}) %></td>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+
+        </main>
+    </div>
+</body>
+</html>

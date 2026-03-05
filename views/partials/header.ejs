@@ -1,0 +1,103 @@
+<header class="main-header">
+    <div class="top-header">
+        <div class="container top-header-container">
+
+            <a href="/" class="logo">
+                <i class="fa-solid fa-book-open"></i>
+                <span>C-BOOK</span> </a>
+
+            <div class="search-bar">
+                <input type="text" id="searchBookInput" placeholder="Search for book titles..."
+                    value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>">
+
+                <div class="custom-select-wrapper">
+                    <div class="custom-select-trigger">
+                        <span>
+                            <% let displayCategoryName='All category' ; if (typeof currentCategory !=='undefined' &&
+                                currentCategory !=='all' && typeof categories !=='undefined' ) { const
+                                matchedCat=categories.find(c=> c.category_id.toString() === currentCategory);
+                                if (matchedCat) displayCategoryName = matchedCat.category_name;
+                                }
+                                %>
+                                <%= displayCategoryName %>
+                        </span>
+                        <i class="fa-solid fa-chevron-down"></i>
+                    </div>
+                    <div class="custom-options">
+                        <span
+                            class="custom-option <%= (typeof currentCategory === 'undefined' || currentCategory === 'all') ? 'selected' : '' %>"
+                            data-value="all">All category</span>
+
+                        <% if (typeof categories !=='undefined' ) { %>
+                            <% categories.forEach(cat=> { %>
+                                <span
+                                    class="custom-option <%= (typeof currentCategory !== 'undefined' && currentCategory === cat.category_id.toString()) ? 'selected' : '' %>"
+                                    data-value="<%= cat.category_id %>">
+                                    <%= cat.category_name %>
+                                </span>
+                                <% }) %>
+                                    <% } %>
+
+                    </div>
+                </div>
+
+                <button type="submit" class="search-btn">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
+
+            <div class="header-actions">
+                <% if (typeof userLoggedIn !=='undefined' && userLoggedIn) { %>
+                    <div
+                        style="display: flex; align-items: center; gap: 8px; color: var(--text-light); font-weight: 600; font-size: 15px;">
+                        <i class="fa-solid fa-circle-user" style="font-size: 20px;"></i>
+                        <%= userName %>
+                    </div>
+
+                    <a href="#" id="cartIconBtn" class="action-icon" title="Cart">
+                        <i class="fa-solid fa-basket-shopping"></i>
+                        <span class="badge" id="cartBadgeCount">
+                            <%= typeof cartCount !=='undefined' ? cartCount : 0 %>
+                        </span>
+                    </a>
+
+                    <a href="/logout" class="action-icon" title="Logout">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </a>
+
+                    <% } else { %>
+                        <a href="/login" class="action-icon" title="Login / Register">
+                            <i class="fa-regular fa-user"></i>
+                        </a>
+                        <% } %>
+
+
+            </div>
+
+        </div>
+    </div>
+
+    <div class="bottom-header">
+        <div class="container bottom-header-container">
+
+            <!-- <div class="store-locator">
+                <i class="fa-solid fa-location-dot"></i>
+                <a href="/location">Find a Book Store</a>
+            </div>-->
+
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="/" class="active">Home </i></a></li>
+                    <!--  <li><a href="/#">Books</a></li> -->
+                    <li><a href="/#">Contact</a></li>
+                </ul>
+            </nav>
+
+            <!-- <div class="contact-number">
+                <i class="fa-solid fa-phone-volume"></i>
+                <span>098-765-4321</span>
+            </div> -->
+
+        </div>
+    </div>
+</header>

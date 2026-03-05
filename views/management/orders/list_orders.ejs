@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Management - C-BOOK</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style-manage.css">
+</head>
+
+<body>
+    <div class="main-layout">
+        <%- include('../../partials/sidebar.ejs') %>
+            <main class="content-area">
+                <div class="content-header">
+                    <div>
+                        <h1>Order Management</h1>
+                        <p class="subtitle">Monitor customer orders.</p>
+                    </div>
+                </div>
+                <div class="toolbar-container">
+                    <div class="toolbar-search">
+                        <i class="fa-solid fa-magnifying-glass search-icon"></i>
+                        <input type="text" id="searchOrderInput"
+                            value="<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>"
+                            placeholder="Search Order ID or Customer..." class="search-input">
+                    </div>
+
+                    <div class="filter-group-container">
+                        <div class="filter-item">
+                            <label class="filter-label">Status</label>
+                            <div class="select-wrapper">
+                                <select id="statusFilter" class="filter-select category-select">
+                                    <option value="">All Statuses</option>
+                                    <option value="pending" <%=typeof filterStatus !=='undefined' &&
+                                        filterStatus==='pending' ? 'selected' : '' %>>Pending</option>
+                                    <option value="delivered" <%=typeof filterStatus !=='undefined' &&
+                                        filterStatus==='delivered' ? 'selected' : '' %>>Delivered</option>
+                                    <option value="cancelled" <%=typeof filterStatus !=='undefined' &&
+                                        filterStatus==='cancelled' ? 'selected' : '' %>>Cancelled</option>
+                                </select>
+                                <i class="fa-solid fa-chevron-down select-icon"></i>
+                            </div>
+                        </div>
+
+                        <div class="total-books-widget">
+                            <div class="total-books-label">Total Orders</div>
+                            <div id="totalOrdersDisplay" class="total-books-value">
+                                <%= typeof totalItems !=='undefined' ? totalItems.toLocaleString() : 0 %>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="data-card">
+                    <table class="category-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Date</th>
+                                <th>Customer</th>
+                                <th>Items</th>
+                                <th>Total Amount</th>
+                                <th>Status</th>
+                                <th style="text-align: right;">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% if (!orders || orders.length===0) { %>
+                                <tr>
+                                    <td class="none-data" colspan="6"
+                                        style="text-align: center; padding: 50px; color: #64748b;">No orders found.</td>
+                                </tr>
+                                <% } else { %>
+                                    <% orders.forEach(order=> { %>
+                                        <tr>
+                                            <td>
+                                                <a href="/management/orders/<%=order.order_id%>" class="order-id-badge">#ORD-<%=
+                                                        order.order_id.toString().padStart(4, '0' ) %>
+                                                </a>
+                                            </td>
+                                            <td>
+                                                <div style="color: #475569;">
+                                                    <%= new Date(order.order_date).toLocaleDateString('en-GB') %>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="font-weight: 500; color: #1e293b;">
+                                                    <%= order.user_name %>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div class="customer-text">
+                                                    <%= order.total_items %> items
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <div style="font-weight: 600; color: var(--primary-red);">
+                                                    <%= parseFloat(order.total_amount).toLocaleString('en-US', {minimumFractionDigits: 2}) %>
+                                                </div>
+                                            </td>
+                                            <td>
+                                                <%
+                                                    let badgeStyle = '';
+                                                    if (order.status === 'pending') {
+                                                        badgeStyle = 'status-pending'; 
+                                                    } else if (order.status === 'delivered') {
+                                                        badgeStyle = 'status-delivered';
+                                                    } else if (order.status === 'cancelled') {
+                                                        badgeStyle = 'status-cancelled'; 
+                                                    } else {
+                                                        badgeStyle = 'status-default';
+                                                    }
+                                                %>
+                                                <span class="status-dropdown <%= badgeStyle %>">
+                                                    <%= order.status %>
+                                                </span>
+                                            </td>
+                                            <td class="text-right">
+                                                <div class="action-group">
+                                                    <a href="/management/orders/<%=order.order_id%>"
+                                                        class="action-btn-edit" title="View Details">
+                                                        <i class="fa-solid fa-eye"></i>
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                        <% }) %>
+                                            <% } %>
+                        </tbody>
+                    </table>
+
+                    <div class="data-footer">
+                        <div class="showing-text">
+                            Showing <%= (typeof totalItems !=='undefined' && totalItems> 0) ? (currentPage - 1) * limit
+                                + 1 : 0 %>
+                                to <%= Math.min(currentPage * limit, typeof totalItems !=='undefined' ? totalItems : 0)
+                                    %>
+                                    of <%= (typeof totalItems !=='undefined' ? totalItems : 0).toLocaleString() %>
+                                        entries
+                        </div>
+                        <div class="pagination">
+                            <a href="<%= currentPage > 1 ? '?page=' + (currentPage - 1) + '&search=' + (typeof searchQuery !== 'undefined' ? searchQuery : '') + '&status=' + (typeof filterStatus !== 'undefined' ? filterStatus : '') : '#' %>"
+                                class="page-nav <%= currentPage === 1 ? 'disabled' : '' %>">
+                                <i class="fa-solid fa-chevron-left"></i>
+                            </a>
+                            <% if (typeof totalPages !=='undefined' ) { %>
+                                <% for (let i=1; i <=totalPages; i++) { if (i===1 || i===totalPages || (i>= currentPage
+                                    - 1 && i <= currentPage + 1)) { %>
+                                        <a href="?page=<%= i %>&search=<%= typeof searchQuery !== 'undefined' ? searchQuery : '' %>&status=<%= typeof filterStatus !== 'undefined' ? filterStatus : '' %>"
+                                            class="page-num <%= currentPage === i ? 'active' : '' %>">
+                                            <%= i %>
+                                        </a>
+                                        <% } else if (i===currentPage - 2 || i===currentPage + 2) { %>
+                                            <span class="page-dots">...</span>
+                                            <% } } %>
+                                                <% } %>
+                                                    <a href="<%= (typeof totalPages !== 'undefined' && currentPage < totalPages) ? '?page=' + (currentPage + 1) + '&search=' + (typeof searchQuery !== 'undefined' ? searchQuery : '') + '&status=' + (typeof filterStatus !== 'undefined' ? filterStatus : '') : '#' %>"
+                                                        class="page-nav <%= (typeof totalPages === 'undefined' || currentPage === totalPages) ? 'disabled' : '' %>">
+                                                        <i class="fa-solid fa-chevron-right"></i>
+                                                    </a>
+                        </div>
+                    </div>
+                </div>
+    </main>
+    </div>
+
+    <script>
+        let searchTimer;
+        let currentAbortController = null;
+
+        const searchInput = document.getElementById('searchOrderInput');
+        const statusFilter = document.getElementById('statusFilter');
+
+        function fetchFilteredOrders() {
+            if (currentAbortController) currentAbortController.abort();
+            currentAbortController = new AbortController();
+            const signal = currentAbortController.signal;
+
+            const query = searchInput.value;
+            const status = statusFilter.value;
+
+            const url = `/management/orders?search=${encodeURIComponent(query)}&status=${encodeURIComponent(status)}`;
+            fetch(url, { headers: { 'X-Requested-With': 'XMLHttpRequest' }, signal: signal })
+                .then(res => res.json())
+                .then(data => {
+                    updateTableBody(data.orders || []);
+                    const total = data.totalItems || 0;
+                    const current = data.currentPage || 1;
+                    const limit = data.limit || 10;
+                    const totalPages = data.totalPages || 1;
+
+                    document.getElementById('totalOrdersDisplay').innerText = total.toLocaleString();
+
+                    const showingText = document.querySelector('.showing-text');
+                    if (showingText) {
+                        const start = total === 0 ? 0 : (current - 1) * limit + 1;
+                        const end = Math.min(current * limit, total);
+                        showingText.innerText = `Showing ${start} to ${end} of ${total.toLocaleString()} entries`;
+                    }
+
+                    updatePagination(current, totalPages, query, status);
+                })
+                .catch(err => {
+                    if (err.name !== 'AbortError') console.error("Search Error:", err);
+                });
+        }
+
+        searchInput.addEventListener('input', () => {
+            clearTimeout(searchTimer);
+            searchTimer = setTimeout(fetchFilteredOrders, 400);
+        });
+
+        statusFilter.addEventListener('change', fetchFilteredOrders);
+
+        function updateTableBody(orders) {
+            const tbody = document.querySelector('.category-table tbody');
+            tbody.innerHTML = '';
+
+            if (!orders || orders.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="6" class="none-data" style="text-align: center; padding: 50px; color: #64748b;">No orders found.</td></tr>`;
+                return;
+            }
+
+            orders.forEach(order => {
+                const orderIdStr = String(order.order_id).padStart(4, '0');
+                const dateStr = new Date(order.order_date).toLocaleDateString('en-GB');
+                const totalStr = parseFloat(order.total_amount).toLocaleString('en-US', { minimumFractionDigits: 2 });
+
+                const badgeStyle = order.status === 'pending' ? 'background: #fffbeb; color: #d97706;' :
+                    order.status === 'delivered' ? 'background: #f0fdf4; color: #16a34a;' :
+                        'background: #fef2f2; color: #dc2626;';
+
+                const row = `
+                <tr>
+                    <td><div class="order-id-badge">#ORD-${orderIdStr}</div></td>
+                    <td><div style="color: #475569;">${dateStr}</div></td>
+                    <td><div style="font-weight: 500; color: #1e293b;">${order.user_name}</div></td>
+                    <td><div class="customer-text">${order.total_items}</div></td>
+                    <td><div style="font-weight: 600; color: var(--primary-red);">${totalStr}</div></td>
+                    <td>
+                        <span style="padding: 6px 12px; border-radius: 6px; font-size: 13px; font-weight: 600; text-transform: capitalize; display: inline-block; ${badgeStyle}">
+                            ${order.status}
+                        </span>
+                    </td>
+                    <td class="text-right">
+                        <div class="action-group">
+                            <a href="/management/orders/${order.order_id}" class="action-btn-edit" title="View Details" style="display: inline-flex; justify-content: center; align-items: center; text-decoration: none;">
+                                <i class="fa-solid fa-eye"></i>
+                            </a>
+                        </div>
+                    </td>
+                </tr>`;
+                tbody.insertAdjacentHTML('beforeend', row);
+            });
+        }
+
+        function updatePagination(currentPage, totalPages, query, status) {
+            const paginationContainer = document.querySelector('.pagination');
+            if (!paginationContainer) return;
+            if (totalPages <= 1) { paginationContainer.innerHTML = ''; return; }
+
+            const getUrl = (p) => `?page=${p}&search=${encodeURIComponent(query)}&status=${encodeURIComponent(status)}`;
+            let html = `<a href="${currentPage > 1 ? getUrl(currentPage - 1) : '#'}" class="page-nav ${currentPage === 1 ? 'disabled' : ''}"><i class="fa-solid fa-chevron-left"></i></a>`;
+
+            for (let i = 1; i <= totalPages; i++) {
+                if (i === 1 || i === totalPages || (i >= currentPage - 1 && i <= currentPage + 1)) {
+                    html += `<a href="${getUrl(i)}" class="page-num ${currentPage === i ? 'active' : ''}">${i}</a>`;
+                } else if (i === currentPage - 2 || i === currentPage + 2) {
+                    html += `<span class="page-dots">...</span>`;
+                }
+            }
+            html += `<a href="${currentPage < totalPages ? getUrl(currentPage + 1) : '#'}" class="page-nav ${currentPage === totalPages ? 'disabled' : ''}"><i class="fa-solid fa-chevron-right"></i></a>`;
+            paginationContainer.innerHTML = html;
+        }
+    </script>
+</body>
+
+</html>

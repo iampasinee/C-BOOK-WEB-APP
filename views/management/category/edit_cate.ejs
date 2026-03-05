@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - C-BOOK</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/style-manage.css">
+</head>
+
+<body>
+    <div class="main-layout">
+        <%- include('../../partials/sidebar.ejs') %>
+
+            <main class="content-area">
+                <div class="content-header">
+                    <div>
+                        <h1>Category Management</h1>
+                        <p class="subtitle">Organize and manage your library book collections.</p>
+                    </div>
+                </div>
+
+                <div class="form-card">
+                    <div class="form-header">
+                        <h2>Edit Category</h2>
+                    </div>
+
+                    <div class="form-body">
+                        <% if (typeof errorMessage !=='undefined' ) { %>
+                            <div class="form-alert-already">
+                                <i class="fa-solid fa-triangle-exclamation"></i>
+                                <span>
+                                    <%= errorMessage %>
+                                </span>
+                            </div>
+                            <% } %>
+                                <form action="/management/category/edit/<%= cat.category_id %>" method="POST">
+                                    <div class="form-group">
+                                        <label class="form-label">Category Name</label>
+                                        <input type="text" name="category_name" class="form-input"
+                                            value="<%= cat.category_name %>" required autofocus>
+                                    </div>
+
+                                    <div class="form-actions">
+                                        <button type="submit" class="btn-submit">Update Category</button>
+                                        <a href="/management/categories" class="btn-cancel">Cancel</a>
+                                    </div>
+                                </form>
+                    </div>
+                </div>
+                
+            </main>
+    </div>
+
+</body>
+
+</html>

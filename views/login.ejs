@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - C-BOOK</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+<body>
+    <%- include('./partials/header.ejs') %>
+
+    <main class="container auth-container">
+        <div class="auth-card" style="max-width: 400px;">
+            <div class="auth-header">
+                <h2>Welcome Back</h2>
+                <p>Log in to your account</p>
+            </div>
+
+            <% if (error) { %>
+                <div class="auth-error-box">
+                    <i class="fa-solid fa-circle-exclamation"></i> <%= error %>
+                </div>
+            <% } %>
+
+            <form action="/login" method="POST">
+                <div class="auth-form-group">
+                    <label class="auth-label">Email</label>
+                    <input type="email" name="email" class="auth-input" required placeholder="Enter your email">
+                </div>
+                <div class="auth-form-group last">
+                    <label class="auth-label">Password</label>
+                    <input type="password" name="password" class="auth-input" required placeholder="Enter your password">
+                </div>
+                <button type="submit" class="auth-btn">
+                    Login
+                </button>
+            </form>
+            <div class="auth-footer">
+                Don't have an account? <a href="/register" class="auth-link">Sign up</a>
+            </div>
+        </div>
+
+    </main>
+</body>
+</html>

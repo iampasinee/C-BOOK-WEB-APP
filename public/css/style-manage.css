@@ -1,0 +1,1936 @@
+/* === Variables & Global === */
+:root {
+    --primary-indigo: #4f46e5;
+    --primary-indigo-light: #f5f3ff;
+    --bg-main: #d5dce7;
+    --white: #ffffff;
+    --text-main: #1e293b;
+    --text-muted: #64748b;
+    --border-color: #e2e8f0;
+    --purple: #7c3aed;
+    --purple-bg: #f5f3ff;
+    --green: #10b981;
+    --green-bg: #ecfdf5;
+    --orange: #f59e0b;
+    --orange-bg: #fff7ed;
+    --blue: #3b82f6;
+    --blue-bg: #eff6ff;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: var(--bg-main);
+    color: var(--text-main);
+}
+
+/* === Layout === */
+.main-layout {
+    display: flex;
+    min-height: 100vh;
+}
+
+.content-area {
+    margin-left: 260px;
+    flex: 1;
+    padding: 40px 60px;
+}
+
+.content-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+/* === Sidebar === */
+.sidebar {
+    width: 260px;
+    background: var(--white);
+    border-right: 1px solid var(--border-color);
+    padding: 30px 20px;
+    display: flex;
+    flex-direction: column;
+    position: fixed;
+    height: 100vh;
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px solid var(--border-color);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.user-avatar {
+    width: 40px;
+    height: 40px;
+    background-color: var(--primary-indigo);
+    color: var(--white);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    font-weight: 700;
+}
+
+.user-info {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.user-name {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-main);
+    line-height: 1.2;
+}
+
+.user-email {
+    font-size: 13px;
+    color: var(--text-muted);
+}
+
+.logo-section {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 40px;
+}
+
+.logo-icon {
+    font-size: 32px;
+    color: var(--primary-indigo);
+}
+
+.logo-text-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.logo-text {
+    font-size: 22px;
+    font-weight: 900;
+    color: #0f172a;
+    line-height: 1.1;
+}
+
+.logo-subtext {
+    font-size: 11px;
+    font-weight: 600;
+    color: #94a3b8;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.nav-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 15px;
+    color: var(--text-muted);
+    text-decoration: none;
+    border-radius: 10px;
+    margin-bottom: 5px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.nav-item:hover,
+.nav-item.active {
+    background-color: #f1f5f9;
+    color: var(--primary-indigo);
+}
+
+/* === Buttons === */
+.btn-primary-add {
+    background-color: var(--primary-indigo);
+    color: white;
+    padding: 10px 24px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+/* === Stats Card === */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border: 1px solid #f1f5f9;
+}
+
+.stat-label {
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 500;
+    display: block;
+    margin-bottom: 8px;
+}
+
+.stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1e293b;
+}
+
+.highlight-text {
+    color: #6366f1;
+    /* สีม่วงเท่ๆ แบบในรูป */
+}
+
+/* === Search Bar === */
+.search-wrapper {
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    border: 1px solid #f1f5f9;
+    border-radius: 8px;
+    padding: 8px 16px;
+    width: 280px;
+    transition: all 0.3s ease;
+}
+
+.search-wrapper:focus-within {
+    outline: none;
+    border-color: #cbd5e1;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 2px rgba(79, 70, 229, 0.1);
+}
+
+.search-wrapper i {
+    color: #94a3b8;
+    font-size: 16px;
+}
+
+.search-wrapper input {
+    border: none;
+    background: transparent;
+    outline: none;
+    margin-left: 10px;
+    width: 100%;
+    font-size: 15px;
+    color: #1e293b;
+}
+
+.search-wrapper input::placeholder {
+    color: #94a3b8;
+    font-weight: 400;
+}
+
+/* === Table === */
+.data-card {
+    background: var(--white);
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+}
+
+.data-header {
+    padding: 20px 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 1px solid #e2e8f0;
+    background-color: #f8fafc;
+}
+
+.category-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.category-table th {
+    text-align: left;
+    padding: 15px 25px;
+    background: #f1f5f9;
+    font-size: 11px;
+    font-weight: 700;
+    color: var(--text-muted);
+}
+
+.category-table td {
+    padding: 18px 25px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.category-table th:nth-child(2),
+.category-table td:nth-child(2) {
+    text-align: center;
+}
+
+.book-thumbnail {
+    width: 45px;
+    height: 60px;
+    object-fit: cover;
+    border-radius: 6px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: block;
+}
+
+.none-data {
+    text-align: center;
+    color: #64748b;
+    font-weight: 500;
+}
+
+/* === Category Icons === */
+.cat-icon-box {
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+}
+.category-link {
+    color: var(--text-main); 
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.category-link:hover {
+    color: #3730a3; 
+    text-decoration: underline; 
+}
+
+/* === Badges === */
+.badge-pill {
+    display: inline-block;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    min-width: 80px;
+    text-align: center;
+}
+
+.red-light {
+    background-color: #fee2e2 !important;
+    color: #ef4444 !important;
+}
+
+.green-light {
+    background-color: #dcfce7 !important;
+    color: #15803d !important;
+}
+
+
+.purple-light {
+    background-color: #f3e8ff !important;
+    color: #6b21a8 !important;
+}
+
+.orange-light {
+    background-color: #ffedd5 !important;
+    color: #c2410c !important;
+}
+
+.blue-light {
+    background-color: #dbeafe !important;
+    color: #1d4ed8 !important;
+}
+
+.pink-light {
+    background-color: #fce7f3 !important;
+    color: #db2777 !important;
+}
+
+.teal-light {
+    background-color: #ccfbf1 !important;
+    color: #0d9488 !important;
+}
+
+.indigo-light {
+    background-color: #e0e7ff !important;
+    color: #4f46e5 !important;
+}
+
+.yellow-light {
+    background-color: #fef9c3 !important;
+    color: #a16207 !important;
+}
+
+.cyan-light {
+    background-color: #cffafe !important;
+    color: #0e7490 !important;
+}
+
+.sky-light {
+    background-color: #e0f2fe !important;
+    color: #0369a1 !important;
+}
+
+.fuchsia-light {
+    background-color: #fae8ff !important;
+    color: #a21caf !important;
+}
+
+.amber-light {
+    background-color: #fef3c7 !important;
+    color: #b45309 !important;
+}
+
+.slate-light {
+    background-color: #f1f5f9 !important;
+    color: #334155 !important;
+}
+
+
+/* =========================================
+   Category Toolbar (Search + Stats)
+========================================= */
+.toolbar-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 16px 24px;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -1px rgba(0, 0, 0, 0.03);
+    margin-bottom: 24px;
+    border: 1px solid #f1f5f9;
+    flex-wrap: wrap; /* เผื่อหน้าจอมือถือ */
+    gap: 16px;
+}
+
+/* ส่วนค้นหา (ด้านซ้าย) */
+.toolbar-search {
+    position: relative;
+    width: 100%;
+    max-width: 350px;
+}
+
+.toolbar-search i {
+    position: absolute;
+    left: 16px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+    font-size: 16px;
+}
+
+.toolbar-search input {
+    width: 100%;
+    padding: 10px 16px 10px 42px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #1e293b;
+    outline: none;
+    transition: all 0.3s ease;
+    background-color: #f8fafc;
+}
+
+.toolbar-search input:focus {
+    border-color: #4f46e5;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* ส่วนตัวเลขสถิติ (ด้านขวา) */
+.toolbar-stats {
+    display: flex;
+    align-items: center;
+    gap: 24px;
+}
+
+.mini-stat {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.mini-stat-label {
+    font-size: 12px;
+    font-weight: 600;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 4px;
+}
+
+.mini-stat-value {
+    font-size: 20px;
+    font-weight: 700;
+    color: #0f172a;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.mini-stat-value i {
+    color: #4f46e5;
+    font-size: 18px;
+}
+
+/* เส้นกั้นระหว่างตัวเลข */
+.stat-divider {
+    width: 1px;
+    height: 32px;
+    background-color: #e2e8f0;
+}
+
+
+
+/* === Actions === */
+.action-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 20px;
+    padding-right: 15px;
+}
+
+.action-btn-edit {
+    color: #64748b;
+    font-size: 18px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    display: inline-block;
+    border: none;
+    background-color: transparent;
+}
+
+.action-btn-edit:hover {
+    color: #4f46e5;
+    transform: scale(1.15);
+}
+
+.action-btn-delete {
+    color: #64748b;
+    background: none;
+    border: none;
+    font-size: 18px;
+    cursor: pointer;
+    padding: 0;
+    transition: all 0.2s ease;
+}
+
+.action-btn-delete:hover {
+    color: #ef4444;
+    transform: scale(1.15);
+}
+
+.form-alert-already {
+    background-color: #fef2f2;
+    color: #b91c1c;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 20px;
+    font-size: 14px;
+    border: 1px solid #fee2e2;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+/* === Pagination & Footer === */
+.data-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 24px 30px;
+    background-color: #f8fafc;
+    border-top: 1px solid #f1f5f9;
+    box-sizing: border-box;
+}
+
+.showing-text {
+    color: #94a3b8;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+.pagination {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+
+.page-num,
+.page-nav {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    height: 38px;
+    border-radius: 10px;
+    font-size: 14px;
+    font-weight: 600;
+    color: #64748b;
+    border: 1px solid #e2e8f0;
+    background-color: #ffffff;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.page-dots {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    height: 38px;
+    color: #94a3b8;
+    font-size: 14px;
+}
+
+
+.page-num.active {
+    background-color: #4f46e5;
+    color: #ffffff;
+    border-color: #4f46e5;
+    box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
+}
+
+.page-nav.disabled {
+    opacity: 0.4;
+    pointer-events: none;
+    background-color: #f8fafc;
+}
+
+.page-num:hover:not(.active),
+.page-nav:hover:not(.disabled) {
+    background-color: #f1f5f9;
+    border-color: #cbd5e1;
+    color: #1e293b;
+}
+
+
+/* =========================================
+   FORM STYLE (สำหรับหน้า Create / Edit)
+   ========================================= */
+
+.form-card {
+    background-color: var(--white);
+    border-radius: 16px;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05);
+    border: 1px solid var(--border-color);
+    max-width: 700px;
+    margin: 10px auto;
+}
+
+.form-header {
+    padding: 24px 30px;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.form-header h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+.form-body {
+    padding: 30px;
+}
+
+
+.form-group {
+    margin-bottom: 25px;
+}
+
+.form-label {
+    display: block;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--text-main);
+    margin-bottom: 10px;
+}
+
+.text-danger {
+    color: #ef4444;
+}
+
+.form-input {
+    width: 100%;
+    padding: 12px 16px;
+    font-size: 14px;
+    color: var(--text-main);
+    background-color: #f8fafc;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    font-family: inherit;
+}
+
+.form-input::placeholder {
+    color: #cbd5e1;
+}
+
+/* เอฟเฟกต์เมื่อคลิกพิมพ์ */
+.form-input:focus {
+    background-color: var(--white);
+    border-color: var(--primary-indigo);
+    outline: none;
+    box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+}
+
+/* กลุ่มปุ่มกดด้านล่าง */
+.form-actions {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-top: 35px;
+    padding-top: 25px;
+    border-top: 1px solid #f1f5f9;
+}
+
+/* ปุ่มตกลง (Submit) */
+.btn-submit {
+    background-color: var(--primary-indigo);
+    color: var(--white);
+    border: none;
+    padding: 12px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.btn-submit:hover {
+    background-color: #4338ca;
+    box-shadow: 0 4px 10px rgba(79, 70, 229, 0.2);
+}
+
+/* ปุ่มยกเลิก (Cancel) */
+.btn-cancel {
+    background-color: var(--white);
+    color: var(--text-muted);
+    border: 1px solid var(--border-color);
+    padding: 11px 24px;
+    font-size: 14px;
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btn-cancel:hover {
+    background-color: #f8fafc;
+    color: var(--text-main);
+    border-color: #cbd5e1;
+}
+
+/* form-image perview*/
+.image-preview-container {
+    margin-top: 12px;
+    display: none;
+}
+
+.image-preview-container img {
+    max-width: 150px;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    object-fit: cover;
+    border: 1px solid #e2e8f0;
+}
+
+
+
+/* =========================================
+   Search & Filter Form Styles
+   ========================================= */
+.search-filter-form {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #f3f6fa;
+    padding: 15px 25px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    border: 1px solid #f1f5f9;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.02);
+}
+
+.filter-search {
+    flex: 1;
+    max-width: 300px;
+    position: relative;
+}
+
+.filter-search .search-icon {
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+}
+
+.filter-search .search-input {
+    width: 100%;
+    padding: 10px 15px 10px 40px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    font-size: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+}
+
+.filter-search .search-input:focus {
+    border-color: #6366f1;
+    /* สีขอบตอนกดพิมพ์ */
+}
+
+
+.filter-group-container {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+}
+
+.filter-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+}
+
+.select-wrapper {
+    position: relative;
+}
+
+.filter-select {
+    appearance: none;
+    -webkit-appearance: none;
+    padding: 10px 35px 10px 15px;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    background-color: #f8fafc;
+    color: #334155;
+    font-size: 14px;
+    font-weight: 500;
+    outline: none;
+    cursor: pointer;
+    transition: border-color 0.2s;
+}
+
+.filter-select:focus {
+    border-color: #6366f1;
+}
+
+.category-select {
+    min-width: 160px;
+}
+
+.status-select {
+    min-width: 130px;
+}
+
+.select-icon {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 10px;
+    color: #94a3b8;
+    pointer-events: none;
+}
+
+/* =========================================
+   Total Books Widget
+   ========================================= */
+.total-books-widget {
+    text-align: right;
+    border-left: 2px solid #f1f5f9;
+    padding-left: 20px;
+    margin-left: 10px;
+}
+
+.total-books-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+.total-books-value {
+    font-size: 20px;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1;
+}
+
+
+/* =========================================
+   Order Management Specific Styles
+========================================= */
+
+/* ป้ายรหัสออเดอร์ให้ดูเด่นขึ้น */
+.order-id-badge {
+    display: inline-block;
+    background-color: #f1f5f9;
+    color: #334155;
+    font-weight: 700;
+    font-size: 13px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+    text-decoration: none;
+}
+.order-id-badge:hover {
+    background-color: #e2e8f0;
+    color: #1e293b;
+    border-color: #cbd5e1;
+}
+
+/* สไตล์ Dropdown สำหรับเปลี่ยนสถานะ */
+.status-dropdown {
+    padding: 6px 12px;
+    border-radius: 6px;
+    border: 1px solid #ddd;
+    outline: none;
+    font-size: 13px;
+    font-weight: 600;
+}
+
+/* การเปลี่ยนสี Dropdown ตามสถานะ */
+.status-dropdown.status-pending {
+    background-color: #fffbeb;
+    color: #d97706;
+    border-color: #fde68a;
+}
+
+.status-dropdown.status-delivered {
+    background-color: #f0fdf4;
+    color: #16a34a;
+    border-color: #bbf7d0;
+}
+
+.status-dropdown.status-cancelled {
+    background-color: #fef2f2;
+    color: #dc2626;
+    border-color: #fecaca;
+}
+
+
+
+/* =========================================
+   Order Detail Page Styles (Redesigned)
+========================================= */
+.order-header-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 20px 25px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    margin-bottom: 25px;
+}
+.detail-page-header { flex-direction: column; align-items: flex-start; gap: 15px; margin-bottom: 20px;}
+.order-header-row { display: flex; justify-content: space-between; width: 100%; align-items: flex-start; }
+.btn-back { display: inline-flex; align-items: center; gap: 8px; color: #64748b; text-decoration: none; font-weight: 500; transition: 0.2s; background: #fff; padding: 6px 15px; border-radius: 6px; border: 1px solid #e2e8f0; font-size: 14px;}
+.btn-back:hover { color: var(--primary-blue, #4f46e5); border-color: var(--primary-blue, #4f46e5); }
+
+.order-date-badges { display: flex; gap: 10px; margin-top: 8px; }
+.date-badge { background: #f1f5f9; color: #475569; font-size: 12px; padding: 4px 10px; border-radius: 4px; font-weight: 500; }
+
+/* Status Badges */
+.detail-status-badge { font-size: 14px; padding: 6px 15px; text-transform: capitalize; display: inline-flex; align-items: center; border-radius: 6px; font-weight: 600; }
+.status-dot { font-size: 8px; margin-right: 6px; }
+.badge-pending { background: #fffbeb; color: #d97706; }
+.badge-delivered { background: #f0fdf4; color: #16a34a; }
+.badge-cancelled { background: #fef2f2; color: #dc2626; }
+
+/* Status Control Box */
+.status-control-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; padding: 20px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
+.status-control-info h3 { font-size: 16px; color: #1e293b; margin-bottom: 4px; }
+.status-control-info p { font-size: 13px; color: #64748b; margin: 0; }
+.status-control-action { display: flex; gap: 10px; align-items: center; }
+.btn-update-status { background: #22c55e; color: #fff; border: none; padding: 8px 16px; border-radius: 6px; font-weight: 600; cursor: pointer; transition: 0.2s; font-size: 14px; }
+.btn-update-status:hover { background: #16a34a; }
+
+/* Customer Info Grid (Top Cards) */
+.customer-info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 25px; }
+.info-card { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; overflow: hidden; box-shadow: 0 1px 3px rgba(0,0,0,0.02); }
+.info-card-header { padding: 15px 20px; border-bottom: 1px solid #e2e8f0; background: #fafafa; }
+.info-card-header h3 { font-size: 13px; font-weight: 700; color: #1e293b; margin: 0; letter-spacing: 0.5px; }
+.info-card-body { padding: 20px; }
+.info-row { display: flex; margin-bottom: 12px; font-size: 14px; }
+.info-row:last-child { margin-bottom: 0; }
+.info-row .label { width: 120px; color: #64748b; font-weight: 500; }
+.info-row .value { flex-grow: 1; color: #334155; font-weight: 500; }
+
+/* Items Ordered Section */
+.items-ordered-section { background: #fff; border: 1px solid #e2e8f0; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.02); overflow: hidden; }
+.items-section-header { padding: 20px; border-bottom: 1px solid #e2e8f0; }
+.items-section-header h3 { font-size: 16px; font-weight: 700; color: #1e293b; margin: 0; }
+
+.items-table { width: 100%; border-collapse: collapse; }
+.items-table th { background: #f8fafc; padding: 12px 20px; font-size: 12px; font-weight: 600; color: #64748b; text-transform: uppercase; border-bottom: 1px solid #e2e8f0; text-align: left; }
+.items-table td { padding: 15px 20px; border-bottom: 1px solid #f1f5f9; vertical-align: middle; }
+.items-table tr:last-child td { border-bottom: none; }
+
+.item-product-cell { display: flex; align-items: center; gap: 15px; }
+.item-product-cell img { width: 45px; height: 60px; object-fit: cover; border-radius: 4px; border: 1px solid #e2e8f0; }
+.item-title-text { font-weight: 600; font-size: 14px; color: #1e293b; }
+
+/* Summary Footer */
+.header-right-action {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
+}
+
+.header-grand-total {
+    font-size: 24px;
+    font-weight: 800;
+    color: var(--primary-red, #ef4444);
+    line-height: 1;
+}
+
+.items-table tfoot {
+    background-color: #fafafa;
+}
+
+.items-table tfoot tr td {
+    border-bottom: none;
+    padding: 12px 20px;
+}
+.items-table tfoot {
+    background-color: #fff;
+}
+
+.items-table tfoot tr td {
+    border-bottom: none;
+    padding: 10px 20px; /* ลด padding บนล่างให้บรรทัดดูชิดกันขึ้นนิดนึง */
+}
+
+/* =========================================
+   สไตล์สำหรับ TFOOT สรุปยอดท้ายตาราง (ปรับให้แยกส่วนชัดเจน)
+========================================= */
+.items-table tfoot {
+    background-color: #f8fafc; 
+    border-top: 2px solid #cbd5e1; 
+}
+
+.items-table tfoot tr td {
+    border-bottom: none;
+    padding: 12px 20px; 
+}
+
+/* ลบ transparent ออกเพื่อให้สีเทายาวเต็มแถบตาราง */
+.tfoot-empty {
+    /* ไม่ต้องกำหนดพื้นหลัง ปล่อยให้มันกลืนเป็นแถบสีเทาไปเลย */
+}
+
+.tfoot-label {
+    text-align: right;
+    color: #475569;
+    font-weight: 600; /* เพิ่มความหนาของตัวอักษรขึ้นมานิดนึง */
+    font-size: 14px;
+}
+
+.tfoot-value {
+    text-align: right;
+    color: #1e293b;
+    font-weight: 600;
+    font-size: 14px;
+    padding-right: 25px !important; 
+}
+
+/* 🚨 3. เส้นคั่นแนวนอนก่อนขึ้น Total Amount (เปลี่ยนเป็นเส้นประให้ดูเหมือนบิล) */
+.border-top-row {
+    border-top: 1px dashed #cbd5e1 !important; 
+    padding-top: 15px !important;
+}
+
+.tfoot-label.grand-label {
+    color: #0f172a;
+    font-weight: 700;
+    font-size: 16px;
+    text-transform: uppercase; /* ดันตัวอักษรให้เป็นพิมพ์ใหญ่ทั้งหมด (TOTAL AMOUNT) */
+}
+
+.tfoot-value.grand-value {
+    color: var(--primary-red, #ef4444);
+    font-weight: 800;
+    font-size: 20px; /* ดันตัวเลขยอดรวมให้ใหญ่และสะดุดตาขึ้น */
+}
+
+@media (max-width: 768px) {
+    .customer-info-grid { grid-template-columns: 1fr; }
+    .status-control-card { flex-direction: column; align-items: flex-start; gap: 15px; }
+    .order-summary-footer { align-items: stretch; }
+    .summary-line { width: 100%; }
+}
+
+
+/* =========================================
+   Dashboard Styles
+========================================= */
+
+/* กริดกล่องสถิติ 4 ช่อง */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.stat-card {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    padding: 24px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+}
+
+.stat-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 22px;
+}
+
+.stat-info h3 {
+    font-size: 14px;
+    color: #64748b;
+    margin: 0 0 5px 0;
+    font-weight: 500;
+}
+
+.stat-info .stat-value {
+    font-size: 24px;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+    line-height: 1;
+}
+
+/* ส่วนหัวของตารางออเดอร์ล่าสุด */
+.recent-orders-section {
+    background: #fff;
+    border: 1px solid #e2e8f0;
+    border-radius: 12px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 24px;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.section-header h2 {
+    font-size: 16px;
+    margin: 0;
+    color: #1e293b;
+}
+
+.btn-view-all {
+    font-size: 13px;
+    color: var(--primary-blue, #4f46e5);
+    font-weight: 600;
+    text-decoration: none;
+    padding: 6px 12px;
+    background: #eff6ff;
+    border-radius: 6px;
+    transition: 0.2s;
+}
+
+.btn-view-all:hover {
+    background: #dbeafe;
+}
+
+/* นำดีไซน์ Badge กลับมาใช้ในหน้านี้ด้วย */
+.order-id-badge {
+    display: inline-block;
+    background-color: #f1f5f9;
+    color: #334155;
+    font-weight: 700;
+    font-size: 12px;
+    padding: 4px 8px;
+    border-radius: 6px;
+    border: 1px solid #e2e8f0;
+}
+
+/* =========================================
+   สไตล์สีสำหรับ Stat Icons แยกตามประเภท
+========================================= */
+.icon-sales {
+    background: #eff6ff;
+    color: #3b82f6;
+}
+
+.icon-orders {
+    background: #f0fdf4;
+    color: #22c55e;
+}
+
+.icon-books {
+    background: #fef2f2;
+    color: #ef4444;
+}
+
+.icon-customers {
+    background: #f5f3ff;
+    color: #8b5cf6;
+}
+
+/* =========================================
+   ตาราง Recent Orders
+========================================= */
+.recent-orders-card {
+    margin-top: 0 !important;
+    box-shadow: none !important;
+    border-top: none !important;
+    border-radius: 0 0 12px 12px !important;
+}
+
+.empty-row-msg {
+    text-align: center;
+    padding: 30px;
+    color: #64748b;
+}
+
+.date-text {
+    color: #475569;
+}
+
+.customer-text {
+    font-weight: 500;
+    color: #1e293b;
+}
+
+.amount-cell {
+    text-align: right;
+    font-weight: 600;
+    color: #1e293b;
+}
+
+/* =========================================
+   Status Badge แบบขนาดเล็ก (สำหรับหน้า Dashboard)
+========================================= */
+.status-badge-sm {
+    padding: 5px 10px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    text-transform: capitalize;
+    display: inline-block;
+}
+
+/* สีแยกตามสถานะ */
+.badge-pending { 
+    background: #fffbeb; 
+    color: #d97706; 
+}
+
+.badge-delivered { 
+    background-color: #f0fdf4; 
+    border: 1px solid #a7f3d0; 
+    color: #0d9488; 
+}
+
+.badge-cancelled { 
+    background: #fef2f2; 
+    color: #dc2626; 
+}
+
+
+/* =========================================
+   Sales by Category Report Styles
+========================================= */
+
+/* Header & Actions */
+.report-header-actions { 
+    display: flex; 
+    justify-content: space-between; 
+    align-items: center; 
+    margin-bottom: 20px; 
+}
+
+.btn-print { 
+    background: #fff; 
+    border: 1px solid #e2e8f0; 
+    padding: 8px 16px; 
+    border-radius: 6px; 
+    color: #475569; 
+    font-weight: 600; 
+    cursor: pointer; 
+    transition: 0.2s; 
+    display: inline-flex; 
+    gap: 8px; 
+    align-items: center; 
+}
+
+.btn-print:hover { 
+    background: #f8fafc; 
+    color: #0f172a; 
+    border-color: #cbd5e1; 
+}
+
+/* Report Card & Table */
+.report-card { 
+    background: #fff; 
+    border: 1px solid #e2e8f0; 
+    border-radius: 12px; 
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02); 
+    overflow: hidden; 
+}
+
+.report-table { 
+    width: 100%; 
+    border-collapse: collapse; 
+}
+
+.report-table th { 
+    background: #f8fafc; 
+    padding: 15px 5px; 
+    font-size: 13px; 
+    font-weight: 600; 
+    color: #64748b; 
+    text-transform: uppercase; 
+    border-bottom: 1px solid #e2e8f0; 
+    text-align: left; 
+}
+
+.report-table td { 
+    padding: 10px 10px; 
+    border-bottom: 1px solid #f1f5f9; 
+    color: #334155; 
+}
+
+/* Column Alignment & Internal Padding */
+.th-rank { width: 80px; text-align: center; }
+.text-center { text-align: center; }
+.text-right { text-align: right; }
+
+.empty-report-msg { text-align: center; padding: 40px; color: #64748b; }
+
+.td-category { font-weight: 600; color: #1e293b; }
+.td-qty { text-align: center; color: #475569; font-weight: 500; }
+.td-revenue { text-align: center; font-weight: 600; color: #0f172a; }
+
+/* Rank Badges */
+.rank-badge { 
+    display: inline-flex; 
+    justify-content: center; 
+    align-items: center; 
+    width: 28px; 
+    height: 28px; 
+    border-radius: 50%; 
+    font-size: 13px; 
+    font-weight: 700; 
+    background: #f1f5f9; 
+    color: #64748b; 
+}
+
+/* เหรียญรางวัล อันดับ 1-3 */
+.rank-1 { background: #fef08a; color: #ca8a04; } /* สีทอง */
+.rank-2 { background: #dce1e9; color: #64748b; } /* สีเงิน */
+.rank-3 { background: #ffedd5; color: #c2410c; } /* สีทองแดง */
+
+/* Table Footer (Summary) */
+.report-table tfoot { 
+    background-color: #f8fafc; 
+    border-top: 2px solid #cbd5e1; 
+}
+
+.report-table tfoot td { 
+    padding: 16px 20px; 
+    border-bottom: none; 
+}
+
+.tfoot-label { 
+    text-align: right; 
+    color: #0f172a; 
+    font-weight: 700; 
+    font-size: 15px; 
+}
+
+.tfoot-qty { 
+    font-weight: 700; 
+    color: #0f172a; 
+    font-size: 16px; 
+    text-align: center;
+}
+
+.tfoot-value { 
+    font-weight: 800; 
+    color: var(--primary-red, #ef4444); 
+    font-size: 18px; 
+    text-align: right; 
+}
+
+
+
+/* =========================================
+   สไตล์สำหรับการกดขยายตาราง (Expandable Rows)
+========================================= */
+.category-main-row {
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+}
+
+.category-main-row:hover {
+    background-color: #f8fafc;
+}
+
+.category-main-row.row-expanded {
+    background-color: #f1f5f9; /* ไฮไลท์สีตอนกางออก */
+}
+
+/* ไอคอนลูกศรชี้ลง */
+.toggle-icon {
+    margin-left: 15px;
+    color: #94a3b8;
+    font-size: 12px;
+    transition: transform 0.2s;
+}
+
+.category-main-row:hover .toggle-icon {
+    color: var(--primary-blue, #4f46e5);
+}
+
+
+
+
+/* =========================================
+   สไตล์เฉพาะสำหรับหน้า Category Detail
+========================================= */
+.top-navigation {
+    margin-bottom: 20px;
+}
+
+.btn-back-white {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: #ffffff;
+    color: #475569;
+    padding: 8px 16px;
+    border-radius: 6px;
+    font-size: 14px;
+    font-weight: 600;
+    text-decoration: none;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+    transition: all 0.2s ease;
+}
+
+.btn-back-white:hover {
+    background: #f8fafc;
+    color: #0f172a;
+    border-color: #cbd5e1;
+}
+
+
+.header-info-card {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 24px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+}
+
+.header-info-left h1 {
+    margin: 0 0 12px 0;
+    font-size: 24px;
+    color: #0f172a;
+}
+
+.highlight-category {
+    color: var(--primary-blue, #4f46e5);
+}
+
+.info-badge {
+    display: inline-block;
+    background: #f1f5f9;
+    color: #475569;
+    padding: 4px 12px;
+    border-radius: 6px;
+    font-size: 13px;
+    font-weight: 500;
+}
+
+/* ลิงก์ย้อนกลับ (Back Link) */
+.back-link-wrapper {
+    margin-bottom: 15px;
+}
+
+.back-link {
+    color: #64748b;
+    text-decoration: none;
+    font-weight: 500;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: color 0.2s;
+}
+
+.back-link:hover {
+    color: var(--primary-blue, #4f46e5);
+}
+
+/* เน้นชื่อหมวดหมู่ใน Header */
+.highlight-category {
+    color: var(--primary-blue, #4f46e5);
+}
+
+/* ไอคอนหนังสือในตาราง */
+.icon-book {
+    color: #94a3b8;
+    margin-right: 8px;
+}
+
+
+/* =========================================
+   สไตล์กล่องสรุปยอดรวม (Summary Cards)
+========================================= */
+.summary-cards-wrapper {
+    display: flex;
+    gap: 20px;
+    margin-bottom: 25px;
+}
+
+.summary-card {
+    background: #ffffff;
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #e2e8f0;
+    width: 50%;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+}
+
+.summary-card-title {
+    margin: 0 0 5px 0;
+    color: #64748b;
+    font-size: 14px;
+    font-weight: 600;
+}
+
+.summary-card-value {
+    margin: 0;
+    font-size: 28px;
+    color: #0f172a;
+}
+
+.summary-card-value.text-red {
+    color: var(--primary-red, #ef4444);
+}
+
+.summary-card-unit {
+    font-size: 16px;
+    color: #94a3b8;
+}
+
+/* =========================================
+   สไตล์ความกว้างและไอคอนในตาราง Detail
+========================================= */
+.th-qty {
+    width: 150px;
+}
+
+.th-revenue {
+    width: 200px;
+}
+
+.icon-book {
+    color: #94a3b8;
+    margin-right: 8px;
+}
+
+
+/* =========================================
+   Filter & Summary Card (กล่องค้นหาและสรุปยอด)
+========================================= */
+.filter-summary-card {
+    background: #ffffff;
+    border-radius: 10px;
+    padding: 15px 24px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+    margin-bottom: 25px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/* ส่วนกล่องค้นหา */
+.search-wrapper {
+    position: relative;
+    width: 350px;
+}
+
+.search-wrapper i {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #94a3b8;
+}
+
+.search-wrapper input {
+    width: 100%;
+    padding: 10px 10px 10px 38px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 14px;
+    color: #334155;
+    outline: none;
+    transition: all 0.2s ease;
+    font-family: 'Inter', sans-serif;
+}
+
+.search-wrapper input:focus {
+    border-color: var(--primary-blue, #4f46e5);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* ส่วนตัวเลขสรุปฝั่งขวา */
+.summary-stats-group {
+    display: flex;
+    align-items: center;
+    gap: 25px;
+}
+
+.stat-group-item {
+    text-align: right;
+}
+
+.stat-group-label {
+    display: block;
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    margin-bottom: 6px;
+    letter-spacing: 0.5px;
+}
+
+.stat-group-value {
+    display: block;
+    font-size: 22px;
+    font-weight: 800;
+    color: #0f172a;
+    line-height: 1;
+}
+
+.stat-divider {
+    width: 1px;
+    height: 40px;
+    background-color: #e2e8f0;
+}
+
+
+/* =========================================
+   Inventory Status Badges (ป้ายสถานะสต็อก)
+========================================= */
+.inventory-badge {
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-block;
+    width: 100px;
+    text-align: center;
+}
+
+/* สีเขียว: สินค้ามีเพียงพอ */
+.badge-in-stock {
+    background-color: #f0fdf4;
+    border: 1px solid #a7f3d0;
+    color: #16a34a;
+}
+
+/* สีส้ม: สินค้าใกล้หมด (<= 10) */
+.badge-low-stock {
+    background-color: #fffbeb;
+    border: 1px solid #fde68a;
+    color: #d97706;
+}
+
+/* สีแดง: สินค้าหมด (0) */
+.badge-out-of-stock {
+    background-color: #fef2f2;
+    border: 1px solid #fecaca;
+    color: #dc2626;
+}
+
+
+/* =========================================
+   สไตล์กล่อง Filter Dropdowns
+========================================= */
+.filter-dropdowns-wrapper {
+    display: flex;
+    gap: 15px;
+}
+
+.filter-col {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.filter-lbl {
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.filter-select-box {
+    padding: 10px 15px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-family: 'Inter', sans-serif;
+    color: #334155;
+    outline: none;
+    min-width: 180px;
+    transition: all 0.2s ease;
+    cursor: pointer;
+}
+
+.filter-select-box:focus {
+    border-color: var(--primary-blue, #4f46e5);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+/* =========================================
+   สไตล์แถบจัดกลุ่มหมวดหมู่ (Category Header)
+========================================= */
+.category-header-row {
+    background-color: #f8fafc;
+}
+
+.category-header-cell {
+    font-weight: 700;
+    color: var(--primary-blue, #4f46e5);
+    padding: 12px 20px;
+    font-size: 14px;
+    border-top: 2px solid #e2e8f0;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+/* เอาเส้นคั่นด้านบนของหมวดหมู่แรกสุดออก */
+.report-table tbody tr:first-child .category-header-cell {
+    border-top: none;
+}
+
+.td-book-title {
+    font-weight: 500;
+    color: #334155;
+    padding-left: 30px !important; /* เยื้องชื่อหนังสือเข้าไปให้ดูสวยงาม */
+}
+
+/* =========================================
+   สไตล์คอลัมน์และข้อความแจ้งเตือน
+========================================= */
+.th-stock { width: 120px; }
+.th-status { width: 150px; }
+.th-action { width: 80px; }
+
+.td-stock {
+    font-weight: 700;
+    font-size: 15px;
+}
+
+.text-normal { color: #334155; }
+.text-red-alert { color: var(--primary-red, #ef4444); }
+
+/* =========================================
+   ปุ่ม Action (Edit)
+========================================= */
+.btn-action-edit {
+    display: inline-flex;
+    justify-content: center;
+    align-items: center;
+    width: 32px;
+    height: 32px;
+    background-color: #eff6ff;
+    color: var(--primary-blue, #4f46e5);
+    border-radius: 6px;
+    text-decoration: none;
+    transition: all 0.2s ease;
+}
+
+.btn-action-edit:hover {
+    background-color: var(--primary-blue, #4f46e5);
+    color: #ffffff;
+}
+
+
+/* คอนเทนเนอร์หลักของส่วนสรุปยอด */
+.summary-stats-group {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    background: #ffffff;
+    padding: 10px 20px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+}
+
+/* หัวข้อตัวเล็กด้านบน (Label) */
+.stat-item-label {
+    font-size: 11px;
+    font-weight: 700;
+    color: #64748b;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+
+/* ค่าตัวเลขสรุปผล (Value) */
+.stat-item-value {
+    font-size: 20px;
+    font-weight: 800;
+    line-height: 1.2;
+}
+
+/* สีเฉพาะสำหรับตัวเลขแต่ละประเภท */
+.value-users {
+    color: #1e293b;
+}
+
+.value-admin {
+    color: #4f46e5; /* สีม่วง/น้ำเงินตามดีไซน์ */
+}
+
+/* เส้นคั่นกลาง */
+.stat-divider {
+    width: 1px;
+    height: 30px;
+    background: #e2e8f0;
+}
+
+
+
+
+@media print {
+    /* 🚨 ปิด Sidebar และส่วนประกอบอื่นๆ ที่ไม่ต้องพิมพ์ออก */
+    .sidebar, 
+    .btn-print, 
+    .th-action, 
+    .btn-action-edit,
+    .top-navigation {
+        display: none !important;
+    }
+
+    /* 🚨 ขยายพื้นที่เนื้อหาให้เต็มหน้ากระดาษเมื่อไม่มี Sidebar */
+    .main-layout {
+        display: block !important;
+    }
+
+    .content-area {
+        margin-left: 0 !important;
+        padding: 0 !important;
+        width: 100% !important;
+    }
+    .filter-summary-card {
+        display: none !important;
+    }
+    /* ลบเงาและกรอบออกเพื่อให้เหมาะกับการพิมพ์ลงกระดาษ */
+    .report-card, .header-info-card, .filter-summary-card {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+    }
+    .summary-cards-wrapper, .btn-view-details, .action-col{
+        display: none !important;
+    }
+}
+
+
+/* =========================================
+   Admin Panel Footer
+========================================= */
+.admin-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 20px 0;
+    margin-top: 40px; /* เว้นระยะจากเนื้อหาด้านบน */
+    border-top: 1px solid #e2e8f0; /* เส้นคั่นบางๆ */
+    color: #94a3b8;
+    font-size: 13px;
+}
+
+.admin-footer strong {
+    color: #475569;
+}
+
+.footer-right {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+/* จุดไข่ปลาคั่นกลาง */
+.footer-dot {
+    width: 4px;
+    height: 4px;
+    background-color: #cbd5e1;
+    border-radius: 50%;
+}
+
+/* ตัวบ่งชี้สถานะระบบ Online */
+.footer-status {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.status-indicator {
+    width: 8px;
+    height: 8px;
+    background-color: #22c55e; /* สีเขียวสว่าง */
+    border-radius: 50%;
+    box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.2);
+}
+
+/* ซ่อน Footer ตอนสั่งพิมพ์รายงาน */
+@media print {
+    .admin-footer {
+        display: none !important;
+    }
+}

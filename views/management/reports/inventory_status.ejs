@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Inventory Status Report - C-BOOK</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/style-manage.css">
+    <link rel="stylesheet" href="/css/report.css">
+</head>
+<body>
+    <div class="main-layout">
+        <%- include('../../partials/sidebar.ejs') %>
+        <main class="content-area">
+            
+            <div class="report-header-actions">
+                <div>
+                    <h1>Inventory Status</h1>
+                    <p class="subtitle">Monitor book stock levels to plan your restocking.</p>
+                </div>
+                <button class="btn-print" onclick="window.print()">
+                    <i class="fa-solid fa-print"></i> Print Report
+                </button>
+            </div>
+
+            <div class="filter-summary-card">
+                <div class="filter-dropdowns-wrapper">
+                    <div class="filter-col">
+                        <label class="filter-lbl">Category</label>
+                        <select id="categoryFilter" class="filter-select-box" onchange="filterInventory()">
+                            <option value="ALL">All Categories</option>
+                            <% categories.forEach(cat => { %>
+                                <option value="<%= cat.category_name %>"><%= cat.category_name %></option>
+                            <% }) %>
+                        </select>
+                    </div>
+
+                    <div class="filter-col">
+                        <label class="filter-lbl">Status</label>
+                        <select id="statusFilter" class="filter-select-box" onchange="filterInventory()">
+                            <option value="ALL">All Status</option>
+                            <option value="low-stock">Low Stock</option>
+                            <option value="out-of-stock">Out of Stock</option>
+                            <option value="in-stock">In Stock</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="summary-stats-group">
+                    <div class="stat-group-item">
+                        <span class="stat-group-label">TOTAL BOOKS</span>
+                        <span class="stat-group-value" id="displayTotalBooks"><%= totalBooks.toLocaleString() %></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="report-card">
+                <table class="report-table" id="inventoryTable">
+                    <thead>
+                        <tr>
+                            <th>Category</th>
+                            <th>Book Title</th>
+                            <th class="text-center th-stock">Stock Left</th>
+                            <th class="text-center th-status">Status</th>
+                            <th class="text-center th-action">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% 
+                            const groupedData = {};
+                            if (reportData && reportData.length > 0) {
+                                reportData.forEach(book => {
+                                    if (!groupedData[book.category]) {
+                                        groupedData[book.category] = [];
+                                    }
+                                    groupedData[book.category].push(book);
+                                });
+                            }
+                            const categoryKeys = Object.keys(groupedData).sort();
+                        %>
+
+                        <% if (categoryKeys.length === 0) { %>
+                            <tr><td colspan="4" class="empty-report-msg">No inventory data available.</td></tr>
+                        <% } else { %>
+                            <% categoryKeys.forEach(catName => { %>
+                                <tr class="category-header-row" data-category-header="<%= catName %>">
+                                    <td colspan="5" class="category-header-cell">
+                                     <%= catName %>
+                                    </td>
+                                </tr>
+
+                                <% groupedData[catName].forEach((book, index) => { %>
+                                    <tr class="data-row" data-category="<%= book.category %>" data-status="<%= book.statusCode %>">
+                                        <td class="text-right"><%= index + 1 %></td>
+                                        <td class="td-book-title">
+                                           <%= book.title %>
+                                        </td>
+                                        
+                                        <td class="text-center td-stock <%= book.stock <= 10 ? 'text-red-alert' : 'text-normal' %>">
+                                            <%= book.stock.toLocaleString() %>
+                                        </td>
+                                        
+                                        <td class="text-center">
+                                            <span class="inventory-badge badge-<%= book.statusCode %>">
+                                                <%= book.statusName %>
+                                            </span>
+                                        </td>
+                                        
+                                        <td class="text-center">
+                                            <a href="/management/books/edit/<%= book.id %>" class="btn-action-edit" title="Edit Book">
+                                                <i class="fa-solid fa-pen-to-square"></i>
+                                            </a>
+                                        </td>
+                                    </tr>
+                                <% }) %>
+                            <% }) %>
+                        <% } %>
+                    </tbody>
+                </table>
+            </div>
+
+        </main>
+    </div>
+
+    <script>
+        function filterInventory() {
+            const catFilter = document.getElementById("categoryFilter").value;
+            const statFilter = document.getElementById("statusFilter").value;
+            
+            const dataRows = document.querySelectorAll(".data-row");
+            const headerRows = document.querySelectorAll(".category-header-row");
+            
+            let visibleCount = 0;
+            const visibleCategories = new Set(); // เก็บชื่อหมวดหมู่ที่มีหนังสือแสดงอยู่
+
+            // 1. กรองแถวหนังสือ
+            dataRows.forEach(row => {
+                const rowCat = row.getAttribute("data-category");
+                const rowStat = row.getAttribute("data-status");
+                
+                const matchCategory = (catFilter === "ALL" || rowCat === catFilter);
+                const matchStatus = (statFilter === "ALL" || rowStat === statFilter);
+
+                if (matchCategory && matchStatus) {
+                    row.style.display = ""; // แสดงหนังสือ
+                    visibleCount++;
+                    visibleCategories.add(rowCat); // บันทึกว่าหมวดหมู่นี้ยังมีข้อมูล
+                } else {
+                    row.style.display = "none"; // ซ่อนหนังสือ
+                }
+            });
+
+            // 2. ซ่อน/แสดง แถวหมวดหมู่
+            headerRows.forEach(header => {
+                const catName = header.getAttribute("data-category-header");
+                // ถ้าหมวดหมู่นี้มีหนังสือที่ถูกแสดงอยู่ ให้แสดงแถวหัวข้อด้วย
+                if (visibleCategories.has(catName)) {
+                    header.style.display = "";
+                } else {
+                    header.style.display = "none";
+                }
+            });
+
+            // อัปเดตตัวเลขรวม
+            document.getElementById("displayTotalBooks").innerText = visibleCount.toLocaleString();
+        }
+    </script>
+</body>
+</html>

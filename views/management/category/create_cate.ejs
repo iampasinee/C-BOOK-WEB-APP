@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - C-BOOK</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+    <link rel="stylesheet" href="/css/style-manage.css">
+</head>
+
+<body>
+    <div class="main-layout">
+        <%- include('../../partials/sidebar.ejs') %>
+
+            <main class="content-area">
+                <div class="content-header">
+                    <div>
+                        <h1>Category Management</h1>
+                        <p class="subtitle">Organize and manage your library book collections.</p>
+                    </div>
+                </div>
+
+                <div class="form-card">
+                    <div class="form-header">
+                        <h2>Create New Category</h2>
+                    </div>
+
+                    <div class="form-body">
+                        <form action="/management/category/create" method="POST">
+                            <% if (typeof errorMessage !=='undefined' ) { %>
+                                <div class="form-alert-already">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    <span>
+                                        <%= errorMessage %>
+                                    </span>
+                                </div>
+                                <% } %>
+                                    <div class="form-group">
+                                        <label for="category_name" class="form-label">Category Name <span
+                                                class="text-danger">*</span></label>
+                                        <input type="text" id="category_name" name="category_name" class="form-input"
+                                            placeholder="Enter category name"
+                                            value="<%= typeof oldValue !== 'undefined' ? oldValue : '' %>" required>
+                                    </div>
+
+                                    <div class="form-actions">
+                                        <button type="submit" class="btn-submit">Create Category</button>
+                                        <a href="/management/categories" class="btn-cancel">Cancel</a>
+                                    </div>
+                        </form>
+                    </div>
+                </div>
+                
+            </main>
+            
+    </div>
+
+</body>
+
+</html>

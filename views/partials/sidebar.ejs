@@ -1,0 +1,48 @@
+<div class="sidebar">
+    <div class="logo-section">
+        <i class="fa-solid fa-book-open logo-icon"></i>
+        <div>
+            <div class="logo-text">C-BOOK</div>
+            <div class="logo-subtext">ADMIN DASHBOARD</div>
+        </div>
+    </div>
+
+    <nav class="sidebar-nav">
+        <a href="/management" class="nav-item <%= typeof activePage !== 'undefined' && activePage === 'home' ? 'active' : '' %>">
+            <i class="fa-solid fa-chart-pie"></i> Home
+        </a>
+        <a href="/management/orders" class="nav-item <%= typeof activePage !== 'undefined' && activePage === 'orders' ? 'active' : '' %>">
+            <i class="fa-solid fa-list"></i> List Orders
+        </a>
+        <a href="/management/books" class="nav-item <%= typeof activePage !== 'undefined' && activePage === 'books' ? 'active' : '' %>">
+            <i class="fa-solid fa-book-bookmark"></i> Books
+        </a>
+        <a href="/management/categories" class="nav-item <%= typeof activePage !== 'undefined' && activePage === 'categories' ? 'active' : '' %>">
+            <i class="fa-solid fa-folder-open"></i> Categories
+        </a>
+        <a href="/management/users/" class="nav-item <%= typeof activePage !== 'undefined' && activePage === 'members' ? 'active' : '' %>">
+            <i class="fa-solid fa-users"></i> Members
+        </a>
+        <br>
+        <div class="nav-label">Reports</div>
+        <a href="/management/reports/sales_category" class="nav-item <%= typeof activePage !== 'undefined' && activePage === 'reports1' ? 'active' : '' %>">
+            <i class="fa-solid fa-chart-bar"></i> Sales by Category Report
+        </a>
+        <a href="/management/reports/inventory-status" class="nav-item <%= typeof activePage !== 'undefined' && activePage === 'reports2' ? 'active' : '' %>">
+            <i class="fa-solid fa-chart-simple"></i> Inventory Status Report
+        </a>
+        <br><br>
+        <div class="nav-label">System</div>
+        <a href="/logout" class="nav-item">
+            <i class="fa-solid fa-right-from-bracket"></i> Logout
+        </a>
+    </nav>
+
+    <div class="sidebar-footer">
+        <div class="user-avatar"><%= typeof userName !== 'undefined' ? userName.substring(0, 2).toUpperCase() : 'AD' %></div>
+        <div class="user-info">
+            <div class="user-name"><%= typeof userName !== 'undefined' ? userName : 'Admin User' %></div>
+            <div class="user-email"><%= typeof userEmail !== 'undefined' ? userEmail : 'admin@cbook.com' %></div>
+        </div>
+    </div>
+</div>
