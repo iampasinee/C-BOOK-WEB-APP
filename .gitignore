@@ -1,2 +1,5 @@
 .env
 node_modules/
+frontend/tmp/
+frontend/node_modules/
+backend/node_modules/

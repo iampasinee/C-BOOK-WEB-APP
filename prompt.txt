@@ -1,0 +1,173 @@
+Refactor my "C-BOOK" project to separate Frontend and Backend into two decoupled architectures.
+
+Repository:https://github.com/iampasinee/C-BOOK-WEB-APP.git
+
+GOAL
+Frontend UI (EJS) → http://localhost:5000
+Backend API (JSON) → http://localhost:3000
+
+STEP 1 - BACKEND SETUP
+Create folder: backend
+
+Move the following into backend:
+
+models/ (Sequelize)
+
+controllers/
+
+routes/
+
+middleware/
+
+Database configuration (e.g., config.json or sqlite file)
+
+Backend rules:
+
+Use Express.js
+
+Return JSON only (Replace all res.render and res.redirect with res.json)
+
+No EJS allowed in the backend
+
+Port = 3000
+
+Add CORS & Static Images:
+
+JavaScript
+const cors = require('cors');
+app.use(cors());
+// Allow frontend to fetch uploaded book images
+app.use('/images', express.static(path.join(__dirname, 'public/images')));
+API Prefix Routes:
+
+/api/books
+
+/api/categories
+
+/api/users
+
+/api/cart
+
+/api/orders
+
+/api/reports
+
+STEP 2 - FRONTEND SETUP
+Create folder: frontend
+
+Move the following into frontend:
+
+views/ (All EJS files & partials)
+
+public/ (CSS, JS scripts, icons - but NOT the uploaded book images)
+
+Frontend rules:
+
+Use Express.js as a Web Server
+
+Use express-session to handle User Login state
+
+Port = 5000
+
+Replace all database logic with fetch() API calls:
+
+Instead of (Server-side rendering):
+
+JavaScript
+const books = await db.books.findAll();
+res.render('home', { books: books });
+Use (Client-side rendering via fetch):
+
+JavaScript
+// In Frontend app.js
+app.get('/', (req, res) => res.render('home', { userLoggedIn: req.session.userId ? true : false }));
+
+// In EJS file (JavaScript)
+const response = await fetch('http://localhost:3000/api/books');
+const data = await response.json();
+// Render grid using DOM manipulation
+STEP 3 - C-BOOK SPECIFIC LOGIC (MULTER & AUTH)
+Image Uploads (Multer): - Multer must run on the Backend.
+
+Save files to backend/public/images/.
+
+Frontend <img> tags must point to http://localhost:3000/images/book_name.jpg.
+
+Admin & User Roles:
+
+Frontend EJS hides/shows buttons based on Session.
+
+Backend APIs must still use authMiddleware to protect PUT/DELETE routes from unauthorized API calls.
+
+STEP 4 - ENV CONFIG & PACKAGE.JSON
+Must have two separate package.json files!
+
+backend/.env
+PORT=3000
+
+frontend/.env
+PORT=5000
+
+FINAL RESULT
+System must:
+✔ Run backend separately (npm start in /backend)
+✔ Run frontend separately (npm start in /frontend)
+✔ Data loaded via API (JSON)
+✔ No direct DB call from the frontend controllers
+✔ Fully working Shopping Cart, Book CRUD, User Management, and Sales Reports
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+---------------------------------
+
+Act as an expert Node.js Full-Stack Developer. I need your help refactoring my monolithic Express + EJS + Sequelize application into a decoupled architecture with a separate Frontend and Backend.
+
+Here are the exact project requirements and constraints:
+
+**1. Backend Architecture (API Server)**
+- Directory: `/backend`
+- Port: 5000 (Set via `backend/.env`)
+- Framework: Express.js
+- Database: Sequelize (Move `models`, `config`, and `controllers` here)
+- Response Format: STRICTLY JSON only. Remove all `res.render()` and `res.redirect()`.
+- Features:
+  - Enable CORS (`app.use(cors())`).
+  - API Prefix: All routes must start with `/api` (e.g., `/api/products`, `/api/orders`, `/api/users`, `/api/reports`).
+  - Image Upload: Use Multer to save images to `backend/public/images/`. Expose this folder statically so the frontend can access images via URL.
+- Entry Point: `backend/app.js` (Must only handle API routes, middleware, and DB connection).
+
+**2. Frontend Architecture (Web/UI Server)**
+- Directory: `/frontend`
+- Port: 3000 (Set via `frontend/.env`)
+- Framework: Express.js
+- View Engine: EJS (Move `views`, `public` styling, and `layouts` here)
+- State Management: Use `express-session` for user login state.
+- Data Fetching: NO direct database connections (`sequelize` is forbidden here). Replace all DB queries with `fetch()` calls to `http://localhost:5000/api/...`.
+- Entry Point: `frontend/app.js` (Must only handle UI routing, static files, session, and rendering EJS).
+
+**3. Specific Logic to Implement (Order Auto-Update)**
+- When adding an order item via the frontend, it should send a POST request to the backend. 
+- The backend API must handle the logic: insert the `order_item`, recalculate the order's total price, and update the main `order` table automatically before sending the JSON response.
+
+**4. Environment & Dependencies**
+- Two separate `package.json` files (one for backend, one for frontend).
+
+**Your Task:**
+Please guide me step-by-step to achieve this final result. Start by providing the exact code for:
+1. The `backend/app.js` (API server entry point).
+2. The `frontend/app.js` (UI server entry point).
+3. The specific backend controller logic for the "Order Auto-Update" requirement.
+
+Please ask for my confirmation before moving on to refactoring the rest of the routes and views.
