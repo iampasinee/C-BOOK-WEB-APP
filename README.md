@@ -7,7 +7,7 @@ assignment javascript webapplicaion : C-BOOK
 แอปพลิเคชันจำหน่ายหนังสือออนไลน์ ที่สามารถสั่งซื้อ ค้นหาหนังสือตามชื่อ/ประเภทหนังสือ และระบบจัดการคำสั่งซื้อและหน้า Dashboard สำหรับวิเคราะห์ข้อมูลรายงาน สำหรับผู้ดูแลระบบ
 
 รายชื่อตาราง
-- Users : user_id (PK), username, email, user_status
+- Users : user_id (PK), user_name, user_email, password, user_role, user_status
 - Books: book_id (PK), title, author, price, stock_quantity,book_satus, category_id (FK)
 - Categories: category_id (PK), category_name,
 - Orders : order_id (PK), user_id (FK), order_date, status
