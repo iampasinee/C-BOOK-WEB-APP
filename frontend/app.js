@@ -587,7 +587,7 @@ app.get('/management/orders', isAdmin, async (req, res) => {
         page: req.query.page || 1,
         search: req.query.search || '',
         status: req.query.status || '',
-        limit: 10
+        limit: 8
       },
       headers: apiHeaders(req)
     });

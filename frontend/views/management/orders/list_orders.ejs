@@ -189,7 +189,7 @@
                     updateTableBody(data.orders || []);
                     const total = data.totalItems || 0;
                     const current = data.currentPage || 1;
-                    const limit = data.limit || 10;
+                    const limit = data.limit || 8;
                     const totalPages = data.totalPages || 1;
 
                     document.getElementById('totalOrdersDisplay').innerText = total.toLocaleString();
