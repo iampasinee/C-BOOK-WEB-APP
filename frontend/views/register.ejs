@@ -35,7 +35,7 @@
                 </div>
                 <div class="auth-form-group last">
                     <label class="auth-label">Password</label>
-                    <input type="password" name="password" class="auth-input" required placeholder="Create a strong password">
+                    <input type="password" name="password" class="auth-input" minlength="6" required placeholder="Create a strong password">
                 </div>
                 <button type="submit" class="auth-btn">
                     Sign Up
@@ -46,5 +46,7 @@
             </div>
         </div>
     </main>
+    <br><br>
+    <%- include('./partials/footer.ejs') %>
 </body>
 </html>
