@@ -33,7 +33,8 @@ module.exports = (sequelize, Datatypes) => {
             defaultValue: 'active',
             allowNull: false
         }
-    }, {
+    }, 
+    {
         // ระบบเข้ารหัสผ่านอัตโนมัติ (Hooks)
         hooks: {
             beforeCreate: async (user) => {
