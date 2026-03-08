@@ -26,8 +26,30 @@ assignment javascript webapplicaion : C-BOOK
 ก่อนเริ่มต้นรันโปรเจกต์ โปรดตรวจสอบให้แน่ใจว่าเครื่องของคุณได้ติดตั้งโปรแกรมเหล่านี้แล้ว:
 - Node.js, Git
 ## วิธีการติดตั้งและรันโปรแกรม
-1. โคลนโปรเจกต์ลงบนเครื่อง (Clone the repository)
-2. การตั้งค่าฝั่งหลังบ้าน (Backend Setup)
-    - เปิด Terminal ใหม่ จากนั้นเข้าไปที่โฟลเดอร์ backend และติดตั้งไลบรารีที่จำเป็น
-    cd backend
-    npm install
+### 1. โคลนโปรเจกต์ลงบนเครื่อง (Clone the repository)
+### 2. การตั้งค่าฝั่งหลังบ้าน (Backend Setup)
+เปิด Terminal ใหม่ จากนั้นเข้าไปที่โฟลเดอร์ backend และติดตั้งไลบรารีที่จำเป็น
+```bash
+cd backend
+npm install
+```
+เริ่มการทำงานของเซิร์ฟเวอร์หลังบ้าน
+```bash
+npm run dev
+```
+### 3. การตั้งค่าฝั่งหน้าบ้าน (Frontend Setup)
+เปิด Terminal อีกหน้าต่างหนึ่ง จากนั้นเข้าไปที่โฟลเดอร์ frontend และติดตั้งไลบรารีที่จำเป็น
+```bash
+cd frontend
+npm install
+```
+เริ่มการทำงานของเซิร์ฟเวอร์หน้าบ้าน
+```bash
+npm run dev
+```
+### 4.การเข้าใช้งานระบบ
+เมื่อรันทั้ง Frontend และ Backend สำเร็จแล้ว สามารถเข้าใช้งานเว็บแอปพลิเคชันผ่านเว็บบราวเซอร์ได้ที่:
+    - หน้าเว็บไซต์หลัก (Frontend): http://localhost:5000
+    - ตรวจสอบสถานะ API (Backend Health Check): http://localhost:3000/api/health
+
+
