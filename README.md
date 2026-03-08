@@ -49,7 +49,7 @@ npm run dev
 ```
 ### 4.การเข้าใช้งานระบบ
 เมื่อรันทั้ง Frontend และ Backend สำเร็จแล้ว สามารถเข้าใช้งานเว็บแอปพลิเคชันผ่านเว็บบราวเซอร์ได้ที่:
-    - หน้าเว็บไซต์หลัก (Frontend): http://localhost:5000
-    - ตรวจสอบสถานะ API (Backend Health Check): http://localhost:3000/api/health
+- หน้าเว็บไซต์หลัก (Frontend): http://localhost:5000
+- ตรวจสอบสถานะ API (Backend Health Check): http://localhost:3000/api/health
 
 
